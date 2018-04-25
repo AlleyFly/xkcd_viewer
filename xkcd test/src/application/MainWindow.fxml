@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="500.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainWindowController">
+   <children>
+      <ImageView fx:id="imageView" fitHeight="150.0" fitWidth="200.0" layoutX="247.0" layoutY="129.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <Button fx:id="recentButton" layoutX="185.0" layoutY="404.0" mnemonicParsing="false" onAction="#loadRecent" text="laod newest" />
+      <VBox alignment="CENTER" layoutX="382.0" layoutY="391.0">
+         <children>
+            <TextField fx:id="numberField" layoutX="382.0" layoutY="391.0" promptText="Number" />
+            <Button fx:id="specifiedButton" alignment="CENTER" layoutX="417.0" layoutY="432.0" mnemonicParsing="false" onAction="#loadNumber" text="load number" />
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
