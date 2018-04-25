@@ -6,7 +6,6 @@ public class Parser {
 	
 	private JsonValue jvalue;
 	private JsonObject jobject;
-	private int newestNum;
 	
 	
 	/**
@@ -17,8 +16,6 @@ public class Parser {
 		try{
 			jvalue = Json.parse(URLReader.readNewest());
 			jobject = jvalue.asObject();
-			newestNum = jobject.getInt("num", 0);
-			//System.out.println(jobject.getString("title", "defaultValue"));
 		}catch(Exception e) {
 			System.out.println("fuck");
 			e.printStackTrace();
@@ -31,16 +28,31 @@ public class Parser {
 	 * @param number : Nummer des zu ladenden Comics
 	 */
 	public Parser(int number) {
-		try {
-			jvalue = Json.parse(URLReader.readNo(number));
-			jobject = jvalue.asObject();
-		}catch(Exception e) {
-			e.printStackTrace();
+		if(number <= getNewest()) {
+			try {
+				jvalue = Json.parse(URLReader.readNo(number));
+				jobject = jvalue.asObject();
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+		}else {
+			System.out.println("Nummer zu groß");
 		}
 	}
 	
 	public String parseImageURL() {
 		return jobject.getString("img", null);
+	}
+	
+	public static int getNewest() {
+		try {
+			JsonValue jvalue = Json.parse(URLReader.readNewest());
+			JsonObject jobject = jvalue.asObject();
+			return jobject.getInt("num", 0);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0;
 	}
 	
 }
