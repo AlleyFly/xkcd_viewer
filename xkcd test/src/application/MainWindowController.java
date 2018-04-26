@@ -34,6 +34,7 @@ public class MainWindowController {
 		imageView.autosize();
 		
 		currentNumber = Parser.getNewest();
+		numberField.setText(Integer.toString(currentNumber));
 	}
 	
 	@FXML
