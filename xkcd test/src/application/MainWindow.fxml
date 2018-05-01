@@ -1,34 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="500.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainWindowController">
+<AnchorPane prefHeight="750.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainWindowController">
    <children>
-      <VBox alignment="CENTER" layoutX="218.0" layoutY="175.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <HBox alignment="CENTER" spacing="100.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
-            <ImageView fx:id="imageView" fitHeight="388.0" fitWidth="471.0" layoutX="282.0" layoutY="175.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="175.0" AnchorPane.leftAnchor="282.0" AnchorPane.rightAnchor="268.0" AnchorPane.topAnchor="175.0" />
-            <HBox alignment="CENTER" layoutX="218.0" layoutY="365.0" spacing="100.0">
+            <Button fx:id="recentButton" layoutX="185.0" layoutY="404.0" mnemonicParsing="false" onAction="#loadRecent" text="load newest" />
+            <VBox alignment="CENTER" layoutX="382.0" layoutY="391.0">
                <children>
-                  <Button fx:id="recentButton" layoutX="185.0" layoutY="404.0" mnemonicParsing="false" onAction="#loadRecent" text="load newest" />
-                  <VBox alignment="CENTER" layoutX="382.0" layoutY="391.0">
+                  <HBox>
                      <children>
-                        <HBox>
-                           <children>
-                              <Button fx:id="prevButton" mnemonicParsing="false" onAction="#loadPrev" text="&lt;" />
-                              <TextField fx:id="numberField" layoutX="382.0" layoutY="391.0" promptText="Number" />
-                              <Button fx:id="nextButton" mnemonicParsing="false" onAction="#loadNext" text="&gt;" />
-                           </children>
-                        </HBox>
-                        <Button fx:id="specifiedButton" alignment="CENTER" layoutX="417.0" layoutY="432.0" mnemonicParsing="false" onAction="#loadNumber" text="load number" />
+                        <Button fx:id="prevButton" mnemonicParsing="false" onAction="#loadPrev" text="&lt;" />
+                        <TextField fx:id="numberField" layoutX="382.0" layoutY="391.0" promptText="Number" />
+                        <Button fx:id="nextButton" mnemonicParsing="false" onAction="#loadNext" text="&gt;" />
                      </children>
-                  </VBox>
+                  </HBox>
+                  <Button fx:id="specifiedButton" alignment="CENTER" layoutX="417.0" layoutY="432.0" mnemonicParsing="false" onAction="#loadNumber" text="load number" />
                </children>
-            </HBox>
+            </VBox>
          </children>
-      </VBox>
+      </HBox>
+      <ScrollPane fx:id="scrollPane" layoutX="50.0" layoutY="30.0" prefHeight="350.0" AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0">
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets>
+         <content>
+            <ImageView fx:id="imageView" pickOnBounds="true" preserveRatio="true" />
+         </content>
+      </ScrollPane>
    </children>
 </AnchorPane>

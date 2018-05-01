@@ -40,19 +40,29 @@ public class Parser {
 		}
 	}
 	
+	/**
+	 * Gibt die URL des zu ladenden Bildes als String zurück
+	 * @return
+	 */
 	public String parseImageURL() {
 		return jobject.getString("img", null);
 	}
 	
+	
+	/**
+	 * Gibt die Nummer des neusten Comic zurück
+	 * bei Fehlschlag 624 (persönlicher Favorit)
+	 * @return
+	 */
 	public static int getNewest() {
 		try {
 			JsonValue jvalue = Json.parse(URLReader.readNewest());
 			JsonObject jobject = jvalue.asObject();
-			return jobject.getInt("num", 0);
+			return jobject.getInt("num", 624);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return 0;
+		return 624;
 	}
 	
 }

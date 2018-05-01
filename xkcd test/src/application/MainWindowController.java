@@ -2,6 +2,7 @@ package application;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -16,45 +17,50 @@ public class MainWindowController {
 	@FXML private Button nextButton;
 	@FXML private TextField numberField;
 	@FXML private ImageView imageView;
+	@FXML private ScrollPane scrollPane;
+	
+	@FXML
+	public void initialize() {
+		imageView.setPreserveRatio(true);
+		this.loadRecent();
+	}
+	
+	public void load(int number) {
+		Parser parser = new Parser(number);
+		Image image = new Image(parser.parseImageURL(),true);
+		imageView.setImage(image);
+	}
 	
 	@FXML
 	public void loadNumber() {
 		currentNumber = Integer.parseInt(numberField.getText());
-		Parser spec = new Parser(currentNumber);
-		Image image = new Image(spec.parseImageURL(),true);
-		imageView.setImage(image);
-		imageView.autosize();
+		
+		this.load(currentNumber);	
 	}
 	
 	@FXML
-	public void loadRecent() {
-		Parser recent = new Parser();
-		Image image = new Image(recent.parseImageURL(),true);
-		imageView.setImage(image);
-		imageView.autosize();
-		
+	public void loadRecent() {				
 		currentNumber = Parser.getNewest();
 		numberField.setText(Integer.toString(currentNumber));
+
+		this.load(currentNumber);
+		
 	}
 	
 	@FXML
 	public void loadPrev() {
 		currentNumber--;
 		numberField.setText(Integer.toString(currentNumber));
-		Parser spec = new Parser(currentNumber);
-		Image image = new Image(spec.parseImageURL(),true);
-		imageView.setImage(image);
-		imageView.autosize();
+		
+		this.load(currentNumber);
 	}
 	
 	@FXML
 	public void loadNext() {
 		currentNumber++;
 		numberField.setText(Integer.toString(currentNumber));
-		Parser spec = new Parser(currentNumber);
-		Image image = new Image(spec.parseImageURL(),true);
-		imageView.setImage(image);
-		imageView.autosize();
+		
+		this.load(currentNumber);
 	}
 	
 }
