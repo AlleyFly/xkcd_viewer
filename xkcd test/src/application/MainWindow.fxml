@@ -31,7 +31,11 @@
             <Insets />
          </opaqueInsets>
          <content>
-            <ImageView fx:id="imageView" pickOnBounds="true" preserveRatio="true" />
+            <StackPane fx:id="stackPane">
+               <children>
+                  <ImageView fx:id="imageView" pickOnBounds="true" preserveRatio="true" />
+               </children>
+            </StackPane>
          </content>
       </ScrollPane>
    </children>
