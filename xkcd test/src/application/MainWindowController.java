@@ -6,6 +6,7 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.StackPane;
 
 public class MainWindowController {
 	
@@ -18,11 +19,17 @@ public class MainWindowController {
 	@FXML private TextField numberField;
 	@FXML private ImageView imageView;
 	@FXML private ScrollPane scrollPane;
+	@FXML private StackPane stackPane;
 	
 	@FXML
 	public void initialize() {
 		imageView.setPreserveRatio(true);
 		this.loadRecent();
+	}
+	
+	@FXML
+	public void centerImage() {
+		stackPane.setPrefSize(scrollPane.getWidth(), scrollPane.getHeight());
 	}
 	
 	public void load(int number) {
