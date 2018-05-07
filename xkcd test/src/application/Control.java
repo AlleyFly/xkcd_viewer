@@ -3,22 +3,24 @@ package application;
 import java.util.ArrayList;
 
 public class Control {
-	ArrayList<Integer> favorites;
+	ArrayList<Favorite> favorites;
 	
 	public Control() {
-		favorites = new ArrayList<Integer>();
+		favorites = new ArrayList<Favorite>();
 	}
 	
-	public void addFavorite(int number) {
-		if(favorites.contains(number)) {
+	public boolean addFavorite(Favorite fav) {
+		if(favorites.contains(fav)) { //returns false, always: boils down to Object.java --> return (this == fav) --> different hash
 			System.out.println("Is already Favorited");
+			return false;
 		}else {
-			favorites.add(number);
+			favorites.add(fav);
+			return true;
 		}
 	}
 	
-	public Integer[] getAllFavorites() {
-		return favorites.toArray(new Integer[favorites.size()]);
+	public Favorite[] getAllFavorites() {
+		return favorites.toArray(new Favorite[favorites.size()]);
 	}
 
 }

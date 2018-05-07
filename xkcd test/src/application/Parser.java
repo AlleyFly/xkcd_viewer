@@ -25,7 +25,7 @@ public class Parser {
 	/**
 	 * Parametesierter Konstruktor
 	 * Läd bestimmten Comic
-	 * @param number : Nummer des zu ladenden Comics
+	 * @param  number  Nummer des zu ladenden Comics
 	 */
 	public Parser(int number) {
 		if(number <= getNewest()) {
@@ -41,18 +41,28 @@ public class Parser {
 	}
 	
 	/**
-	 * Gibt die URL des zu ladenden Bildes als String zurück
-	 * @return
+	 * Parser für das Bild
+	 * 
+	 * @return die URL der Bilddatei als String
 	 */
 	public String parseImageURL() {
 		return jobject.getString("img", null);
 	}
 	
+	/**
+	 * Parser für Bildtitel
+	 * 
+	 * @return Bildtitel als String
+	 */
+	public String parseTitle() {
+		return jobject.getString("title", "oops");
+	}
+	
 	
 	/**
-	 * Gibt die Nummer des neusten Comic zurück
-	 * bei Fehlschlag 624 (persönlicher Favorit)
-	 * @return
+	 * Sucht Nummer des neusten Comics
+	 * 
+	 * @return Nummer des neusten als int, sonst 624
 	 */
 	public static int getNewest() {
 		try {

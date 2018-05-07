@@ -3,7 +3,10 @@ package application;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
@@ -21,6 +24,9 @@ public class MainWindowController {
 	@FXML private ImageView imageView;
 	@FXML private ScrollPane scrollPane;
 	@FXML private StackPane stackPane;
+	@FXML private TableView tabFavorites;
+	@FXML private TableColumn colNumber;
+	@FXML private TableColumn colTitle;
 	
 	Control control;
 	
@@ -29,6 +35,9 @@ public class MainWindowController {
 		imageView.setPreserveRatio(true);
 		control = new Control();
 		this.loadRecent();
+		
+		colNumber.setCellValueFactory(new PropertyValueFactory<>("number"));
+		colTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
 	}
 	
 	@FXML
@@ -76,7 +85,16 @@ public class MainWindowController {
 	
 	@FXML
 	public void favorite() {
-		control.addFavorite(currentNumber);
+		//get title
+		Parser parser = new Parser(currentNumber);
+		String title = parser.parseTitle();
+		
+		Favorite fav = new Favorite(currentNumber, title);
+		if(control.addFavorite(fav)) {
+			tabFavorites.getItems().add(fav);
+		}else {
+			System.out.println("already favd");
+		}
 	}
 	
 }

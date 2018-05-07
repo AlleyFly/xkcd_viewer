@@ -11,6 +11,12 @@
    <children>
       <HBox alignment="CENTER" spacing="100.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
+            <TableView fx:id="tabFavorites" prefHeight="70.0" prefWidth="200.0">
+              <columns>
+                <TableColumn fx:id="colNumber" prefWidth="75.0" text="Number" />
+                <TableColumn fx:id="colTitle" prefWidth="115.0" text="Title" />
+              </columns>
+            </TableView>
             <Button fx:id="favButton" mnemonicParsing="false" onAction="#favorite" text="Favorite" />
             <VBox alignment="CENTER" layoutX="382.0" layoutY="391.0">
                <children>
