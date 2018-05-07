@@ -16,14 +16,18 @@ public class MainWindowController {
 	@FXML private Button specifiedButton;
 	@FXML private Button prevButton;
 	@FXML private Button nextButton;
+	@FXML private Button favButton;
 	@FXML private TextField numberField;
 	@FXML private ImageView imageView;
 	@FXML private ScrollPane scrollPane;
 	@FXML private StackPane stackPane;
 	
+	Control control;
+	
 	@FXML
 	public void initialize() {
 		imageView.setPreserveRatio(true);
+		control = new Control();
 		this.loadRecent();
 	}
 	
@@ -68,6 +72,11 @@ public class MainWindowController {
 		numberField.setText(Integer.toString(currentNumber));
 		
 		this.load(currentNumber);
+	}
+	
+	@FXML
+	public void favorite() {
+		control.addFavorite(currentNumber);
 	}
 	
 }
