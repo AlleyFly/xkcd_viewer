@@ -7,6 +7,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 public class FavoriteWindowController {
 	
+	MainWindowController mainController;
+	
 	@FXML private TableView tabFavorites;
 	@FXML private TableColumn colNumber;
 	@FXML private TableColumn colTitle;
@@ -15,14 +17,24 @@ public class FavoriteWindowController {
 	public void initialize() {
 		
 		colNumber.setCellValueFactory(new PropertyValueFactory<>("number"));
-		colTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+		colTitle.setCellValueFactory(new PropertyValueFactory<>("title"));	
+		
+	}
+	
+	public void setMainController(MainWindowController mwController) {
+		this.mainController = mwController;
 		
 		tabFavorites.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
 		    if (newSelection != null) {
 		    	Favorite fav = (Favorite) tabFavorites.getSelectionModel().getSelectedItem();
-		    	//load(fav.getNumber());
+		    	mainController.load(fav.getNumber());
 		    }
 		});
+	}
+	
+	@FXML
+	public void newEntry(Favorite fav) {
+		tabFavorites.getItems().add(fav);
 	}
 
 }

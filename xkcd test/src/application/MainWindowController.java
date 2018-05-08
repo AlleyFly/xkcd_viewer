@@ -42,10 +42,13 @@ public class MainWindowController {
 		FXMLLoader favoriteTab = new FXMLLoader();
 		favoriteTab.setLocation(Main.class.getResource("FavoriteWindow.fxml"));
 		root1 = favoriteTab.load();
+		
+		favoriteController = favoriteTab.getController();
 	}
 	
 	@FXML
-	public void showFavorites() {               
+	public void showFavorites() {  
+		favoriteController.setMainController(this);
 	        try {
 	            Stage stage = new Stage();
 	            stage.setScene(new Scene(root1));  
@@ -106,7 +109,7 @@ public class MainWindowController {
 		
 		Favorite fav = new Favorite(currentNumber, title);
 		if(control.addFavorite(fav)) {
-			//tabFavorites.getItems().add(fav);
+			favoriteController.newEntry(fav);
 		}else {
 			System.out.println("already favd");
 		}
