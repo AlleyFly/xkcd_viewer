@@ -1,7 +1,6 @@
 package application;
 
 import java.util.ArrayList;
-import java.util.Objects;
 
 public class Favorite {
 	private int number;

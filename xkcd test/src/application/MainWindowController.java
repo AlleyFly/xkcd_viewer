@@ -1,15 +1,18 @@
 package application;
 
+import java.io.IOException;
+
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
 public class MainWindowController {
 	
@@ -24,27 +27,32 @@ public class MainWindowController {
 	@FXML private ImageView imageView;
 	@FXML private ScrollPane scrollPane;
 	@FXML private StackPane stackPane;
-	@FXML private TableView tabFavorites;
-	@FXML private TableColumn colNumber;
-	@FXML private TableColumn colTitle;
+	@FXML private Button favWindowButton;
 	
 	Control control;
+	FavoriteWindowController favoriteController;
+	AnchorPane root1;
 	
 	@FXML
-	public void initialize() {
+	public void initialize() throws IOException {
 		imageView.setPreserveRatio(true);
 		control = new Control();
 		this.loadRecent();
 		
-		colNumber.setCellValueFactory(new PropertyValueFactory<>("number"));
-		colTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
-		
-		tabFavorites.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-		    if (newSelection != null) {
-		    	Favorite fav = (Favorite) tabFavorites.getSelectionModel().getSelectedItem();
-		    	load(fav.getNumber());
-		    }
-		});
+		FXMLLoader favoriteTab = new FXMLLoader();
+		favoriteTab.setLocation(Main.class.getResource("FavoriteWindow.fxml"));
+		root1 = favoriteTab.load();
+	}
+	
+	@FXML
+	public void showFavorites() {               
+	        try {
+	            Stage stage = new Stage();
+	            stage.setScene(new Scene(root1));  
+	            stage.show();
+	        } catch(Exception e) {
+	        	e.printStackTrace();
+	        }
 	}
 	
 	@FXML
@@ -98,7 +106,7 @@ public class MainWindowController {
 		
 		Favorite fav = new Favorite(currentNumber, title);
 		if(control.addFavorite(fav)) {
-			tabFavorites.getItems().add(fav);
+			//tabFavorites.getItems().add(fav);
 		}else {
 			System.out.println("already favd");
 		}
