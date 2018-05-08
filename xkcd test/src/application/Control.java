@@ -10,7 +10,7 @@ public class Control {
 	}
 	
 	public boolean addFavorite(Favorite fav) {
-		if(favorites.contains(fav)) { //returns false, always: boils down to Object.java --> return (this == fav) --> different hash
+		if(Favorite.contains(favorites, fav)) {
 			System.out.println("Is already Favorited");
 			return false;
 		}else {

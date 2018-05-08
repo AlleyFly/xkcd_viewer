@@ -38,6 +38,13 @@ public class MainWindowController {
 		
 		colNumber.setCellValueFactory(new PropertyValueFactory<>("number"));
 		colTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+		
+		tabFavorites.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+		    if (newSelection != null) {
+		    	Favorite fav = (Favorite) tabFavorites.getSelectionModel().getSelectedItem();
+		    	load(fav.getNumber());
+		    }
+		});
 	}
 	
 	@FXML

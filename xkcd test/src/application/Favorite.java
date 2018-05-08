@@ -23,5 +23,14 @@ public class Favorite {
 		this.number = number;
 		this.title = title;
 	}
+	
+	public static boolean contains(ArrayList<Favorite> list, Favorite fav) {
+		for(Favorite s : list) {
+			if(s.number == fav.number) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 }
