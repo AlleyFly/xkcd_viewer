@@ -9,9 +9,23 @@ import javafx.scene.layout.AnchorPane;
 
 
 public class Main extends Application {
+	
+	private static Stage pStage;
+	
+	public static Stage getStage() {
+		return pStage;
+	}
+	
+	public void setStage(Stage stage) {
+		pStage = stage;
+	}
+	
 	@Override
 	public void start(Stage primaryStage) {
 		try {
+			
+			setStage(primaryStage);
+
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("MainWindow.fxml"));
 			AnchorPane root = loader.load();

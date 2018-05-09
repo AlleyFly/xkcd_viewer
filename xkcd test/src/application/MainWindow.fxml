@@ -18,7 +18,7 @@
                   <HBox>
                      <children>
                         <Button fx:id="prevButton" mnemonicParsing="false" onAction="#loadPrev" text="&lt;" />
-                        <TextField fx:id="numberField" layoutX="382.0" layoutY="391.0" promptText="Number" />
+                        <TextField fx:id="numberField" layoutX="382.0" layoutY="391.0" onAction="#loadNumber" promptText="Number" />
                         <Button fx:id="nextButton" mnemonicParsing="false" onAction="#loadNext" text="&gt;" />
                      </children>
                   </HBox>

@@ -29,33 +29,45 @@ public class MainWindowController {
 	@FXML private StackPane stackPane;
 	@FXML private Button favWindowButton;
 	
-	Control control;
-	FavoriteWindowController favoriteController;
-	AnchorPane root1;
+	private Control control;
+	private FavoriteWindowController favoriteController;
+	private AnchorPane root1;
+	private Stage favStage;
+	
 	
 	@FXML
 	public void initialize() throws IOException {
-		imageView.setPreserveRatio(true);
-		control = new Control();
-		this.loadRecent();
 		
+		//Load fxml for FAVORITEWINDOW
 		FXMLLoader favoriteTab = new FXMLLoader();
 		favoriteTab.setLocation(Main.class.getResource("FavoriteWindow.fxml"));
 		root1 = favoriteTab.load();
-		
 		favoriteController = favoriteTab.getController();
+		favoriteController.setMainController(this);		            
+
+		
+		//set FAVORITEWINDOW parameters
+		favStage = new Stage();
+        favStage.setScene(new Scene(root1));  
+        //set give Controller to FAVORITEWINDOW so it can call load()
+
+		
+		imageView.setPreserveRatio(true);
+		this.loadRecent();
+		
+		control = new Control();
+
 	}
 	
 	@FXML
 	public void showFavorites() {  
-		favoriteController.setMainController(this);
-	        try {
-	            Stage stage = new Stage();
-	            stage.setScene(new Scene(root1));  
-	            stage.show();
-	        } catch(Exception e) {
-	        	e.printStackTrace();
-	        }
+		if(favStage.isShowing()) {
+            favStage.hide();
+		} else {
+	        favStage.setX(Main.getStage().getX() - 310);
+	        favStage.setY(Main.getStage().getY());
+			favStage.show();
+		}
 	}
 	
 	@FXML
@@ -64,15 +76,18 @@ public class MainWindowController {
 	}
 	
 	public void load(int number) {
-		Parser parser = new Parser(number);
-		Image image = new Image(parser.parseImageURL(),true);
-		imageView.setImage(image);
+		if(currentNumber > 0 && currentNumber <= Parser.getNewest()) {
+			Parser parser = new Parser(number);
+			Image image = new Image(parser.parseImageURL(),true);
+			imageView.setImage(image);
+		} else {
+			numberField.setText("Invalid Number");
+		}
 	}
 	
 	@FXML
 	public void loadNumber() {
 		currentNumber = Integer.parseInt(numberField.getText());
-		
 		this.load(currentNumber);	
 	}
 	
