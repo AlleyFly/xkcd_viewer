@@ -1,8 +1,9 @@
 package application;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Favorite {
+public class Favorite implements Serializable {
 	private int number;
 	private String title;
 	
@@ -23,12 +24,19 @@ public class Favorite {
 		this.title = title;
 	}
 	
-	public static boolean contains(ArrayList<Favorite> list, Favorite fav) {
+	/*public static boolean contains(ArrayList<Favorite> list, Favorite fav) {
 		for(Favorite s : list) {
 			if(s.number == fav.number) {
 				return true;
 			}
 		}
+		return false;
+	}*/
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof Favorite)
+			return number == ((Favorite)obj).number;
 		return false;
 	}
 

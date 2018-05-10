@@ -59,6 +59,19 @@ public class MainWindowController {
 
 	}
 	
+	public Control getControl() {
+		return control;
+	}
+	
+	public void closeFavorites() {
+		if(favStage.isShowing())
+			favStage.close();
+	}
+	
+	public void toFrontFavorites() {
+		favStage.toFront();
+	}
+	
 	@FXML
 	public void showFavorites() {  
 		if(favStage.isShowing()) {
@@ -80,6 +93,8 @@ public class MainWindowController {
 			Parser parser = new Parser(number);
 			Image image = new Image(parser.parseImageURL(),true);
 			imageView.setImage(image);
+			currentNumber = number; //not redundant, but for calling load from favorites
+			numberField.setText(Integer.toString(number));
 		} else {
 			numberField.setText("Invalid Number");
 		}
@@ -94,7 +109,6 @@ public class MainWindowController {
 	@FXML
 	public void loadRecent() {				
 		currentNumber = Parser.getNewest();
-		numberField.setText(Integer.toString(currentNumber));
 
 		this.load(currentNumber);
 		
@@ -103,7 +117,6 @@ public class MainWindowController {
 	@FXML
 	public void loadPrev() {
 		currentNumber--;
-		numberField.setText(Integer.toString(currentNumber));
 		
 		this.load(currentNumber);
 	}
@@ -111,7 +124,6 @@ public class MainWindowController {
 	@FXML
 	public void loadNext() {
 		currentNumber++;
-		numberField.setText(Integer.toString(currentNumber));
 		
 		this.load(currentNumber);
 	}
@@ -126,7 +138,7 @@ public class MainWindowController {
 		if(control.addFavorite(fav)) {
 			favoriteController.newEntry(fav);
 		}else {
-			System.out.println("already favd");
+			favoriteController.deleteEntry(fav);
 		}
 	}
 	

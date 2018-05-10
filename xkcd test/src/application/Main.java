@@ -19,7 +19,7 @@ public class Main extends Application {
 	public void setStage(Stage stage) {
 		pStage = stage;
 	}
-	
+
 	@Override
 	public void start(Stage primaryStage) {
 		try {
@@ -40,6 +40,12 @@ public class Main extends Application {
 			primaryStage.heightProperty().addListener((obs, oldVal, newVal) -> {
 				controller.centerImage();
 			});
+			primaryStage.setOnCloseRequest(event -> {
+			    controller.closeFavorites();
+			});
+			/*primaryStage.focusedProperty().addListener((obs, oldVal, newVal) -> {
+				controller.toFrontFavorites();
+			});*/ //blocks main window as long as Favorite Window is open 
 			
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());

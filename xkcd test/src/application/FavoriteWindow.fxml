@@ -8,11 +8,17 @@
 
 <AnchorPane prefHeight="750.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.FavoriteWindowController">
    <children>
-      <TableView fx:id="tabFavorites" layoutX="50.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0">
+      <TableView fx:id="tabFavorites" layoutX="50.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="100.0" AnchorPane.leftAnchor="30.0" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="30.0">
         <columns>
           <TableColumn fx:id="colNumber" prefWidth="100.0" text="Number" />
           <TableColumn fx:id="colTitle" prefWidth="120.0" text="Title" />
         </columns>
       </TableView>
+      <HBox alignment="CENTER" layoutX="30.0" layoutY="679.0" spacing="50.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <Button fx:id="saveButton" layoutX="30.0" layoutY="679.0" mnemonicParsing="false" onAction="#saveFavorites" text="Save" />
+            <Button fx:id="loadButton" layoutX="176.0" layoutY="679.0" mnemonicParsing="false" onAction="#loadFavorites" text="Load" />
+         </children>
+      </HBox>
    </children>
 </AnchorPane>
