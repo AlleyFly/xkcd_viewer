@@ -58,6 +58,15 @@ public class Parser {
 		return jobject.getString("title", "oops");
 	}
 	
+	/**
+	 * Parser für alternative Information
+	 * 
+	 * @return Text als String
+	 */
+	public String parseAlt() {
+		return jobject.getString("alt", "");
+	}
+	
 	
 	/**
 	 * Sucht Nummer des neusten Comics

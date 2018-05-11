@@ -2,9 +2,12 @@ package application;
 	
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 
 
@@ -34,23 +37,26 @@ public class Main extends Application {
 			//resize Listener
 			MainWindowController controller = loader.getController();
 
-			primaryStage.widthProperty().addListener((obs, oldVal, newVal) -> {
-				controller.centerImage();
+			primaryStage.setOnCloseRequest(event -> controller.closeFavorites());
+			
+			primaryStage.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+				@Override
+				public void handle(KeyEvent event) {
+					if(event.getCode() == KeyCode.NUMPAD4)
+						controller.loadPrev();
+					else if(event.getCode() == KeyCode.NUMPAD6)
+						controller.loadNext();
+					else if(event.getCode() == KeyCode.NUMPAD5)
+						controller.loadRecent();
+					else if(event.getCode() == KeyCode.NUMPAD0){
+						controller.getTextField().requestFocus();
+					}
+				}
 			});
-			primaryStage.heightProperty().addListener((obs, oldVal, newVal) -> {
-				controller.centerImage();
-			});
-			primaryStage.setOnCloseRequest(event -> {
-			    controller.closeFavorites();
-			});
-			/*primaryStage.focusedProperty().addListener((obs, oldVal, newVal) -> {
-				controller.toFrontFavorites();
-			});*/ //blocks main window as long as Favorite Window is open 
 			
 			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
-			primaryStage.setTitle("xkcd");
 			primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();

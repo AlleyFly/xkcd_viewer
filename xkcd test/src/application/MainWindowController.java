@@ -6,10 +6,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
@@ -28,6 +31,7 @@ public class MainWindowController {
 	@FXML private ScrollPane scrollPane;
 	@FXML private StackPane stackPane;
 	@FXML private Button favWindowButton;
+	@FXML private Label imgLabel;
 	
 	private Control control;
 	private FavoriteWindowController favoriteController;
@@ -56,20 +60,28 @@ public class MainWindowController {
 		this.loadRecent();
 		
 		control = new Control();
-
+		
+		scrollPane.setFitToHeight(true);
+		scrollPane.setFitToWidth(true);
+		
 	}
 	
 	public Control getControl() {
 		return control;
 	}
 	
+	@FXML
+	public TextField getTextField() {
+		return numberField;
+	}
+	
+	public int getCurrentNumber() {
+		return currentNumber;
+	}
+	
 	public void closeFavorites() {
 		if(favStage.isShowing())
 			favStage.close();
-	}
-	
-	public void toFrontFavorites() {
-		favStage.toFront();
 	}
 	
 	@FXML
@@ -83,27 +95,27 @@ public class MainWindowController {
 		}
 	}
 	
-	@FXML
-	public void centerImage() {
-		stackPane.setPrefSize(scrollPane.getWidth(), scrollPane.getHeight());
-	}
-	
 	public void load(int number) {
-		if(currentNumber > 0 && currentNumber <= Parser.getNewest()) {
+		if(number > 0 && number <= Parser.getNewest()) {
 			Parser parser = new Parser(number);
 			Image image = new Image(parser.parseImageURL(),true);
 			imageView.setImage(image);
+			Main.getStage().setTitle(parser.parseTitle());
+			imgLabel.setText(parser.parseAlt());
 			currentNumber = number; //not redundant, but for calling load from favorites
 			numberField.setText(Integer.toString(number));
+			scrollPane.requestFocus();
 		} else {
-			numberField.setText("Invalid Number");
+			System.out.println("Invalid Number");
+			numberField.clear();
+			
 		}
 	}
 	
 	@FXML
 	public void loadNumber() {
 		currentNumber = Integer.parseInt(numberField.getText());
-		this.load(currentNumber);	
+		this.load(currentNumber);
 	}
 	
 	@FXML
@@ -139,6 +151,13 @@ public class MainWindowController {
 			favoriteController.newEntry(fav);
 		}else {
 			favoriteController.deleteEntry(fav);
+		}
+	}
+	
+	@FXML
+	public void handleEnter(KeyEvent event) {
+		if(event.getCode() == KeyCode.ENTER) {
+			favorite();
 		}
 	}
 	
