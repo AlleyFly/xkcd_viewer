@@ -47,10 +47,11 @@ public class Main extends Application {
 					else if(event.getCode() == KeyCode.NUMPAD6)
 						controller.loadNext();
 					else if(event.getCode() == KeyCode.NUMPAD5)
-						controller.loadRecent();
-					else if(event.getCode() == KeyCode.NUMPAD0){
+						controller.loadRandom();
+					else if(event.getCode() == KeyCode.NUMPAD0)
 						controller.getTextField().requestFocus();
-					}
+					else if(event.getCode() == KeyCode.NUMPAD8)
+						controller.loadRecent();
 				}
 			});
 			
