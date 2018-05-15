@@ -10,7 +10,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 public class FavoriteWindowController {
 	
-	MainWindowController mainController;
+	private Control control;
 	
 	@FXML private TableView tabFavorites;
 	@FXML private TableColumn colNumber;
@@ -26,15 +26,12 @@ public class FavoriteWindowController {
 		
 	}
 	
-	public void setMainController(MainWindowController mwController) {
-		this.mainController = mwController;
-		
-		tabFavorites.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-		    if (newSelection != null) {
-		    	Favorite fav = (Favorite) tabFavorites.getSelectionModel().getSelectedItem();
-		    	mainController.load(fav.getNumber());
-		    }
-		});
+	public void setControl(Control control) {
+		this.control = control;
+	}
+	
+	public TableView getTable() {
+		return tabFavorites;
 	}
 	
 	@FXML
@@ -50,7 +47,7 @@ public class FavoriteWindowController {
 	@FXML
 	public void saveFavorites() {
 		try {
-			mainController.getControl().saveList();
+			control.saveList();
 		} catch (IOException e) {
 			e.printStackTrace();
 			System.out.println("couldn't save Favorites");
@@ -61,7 +58,7 @@ public class FavoriteWindowController {
 	public void loadFavorites() {
 		try {
 			tabFavorites.getItems().clear();
-			tabFavorites.getItems().addAll(mainController.getControl().loadList());
+			tabFavorites.getItems().addAll(control.loadList());
 		} catch (IOException | ClassNotFoundException e) {
 			e.printStackTrace();
 			System.out.println("couldn't load Favorites");

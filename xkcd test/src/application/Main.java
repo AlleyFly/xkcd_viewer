@@ -29,36 +29,9 @@ public class Main extends Application {
 			
 			setStage(primaryStage);
 
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(Main.class.getResource("MainWindow.fxml"));
-			AnchorPane root = loader.load();
+			Control control = new Control(primaryStage);
 			
 			
-			//resize Listener
-			MainWindowController controller = loader.getController();
-
-			primaryStage.setOnCloseRequest(event -> controller.closeFavorites());
-			
-			primaryStage.addEventHandler(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
-				@Override
-				public void handle(KeyEvent event) {
-					if(event.getCode() == KeyCode.NUMPAD4)
-						controller.loadPrev();
-					else if(event.getCode() == KeyCode.NUMPAD6)
-						controller.loadNext();
-					else if(event.getCode() == KeyCode.NUMPAD5)
-						controller.loadRandom();
-					else if(event.getCode() == KeyCode.NUMPAD0)
-						controller.getTextField().requestFocus();
-					else if(event.getCode() == KeyCode.NUMPAD8)
-						controller.loadRecent();
-				}
-			});
-			
-			Scene scene = new Scene(root);
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
-			primaryStage.setScene(scene);
-			primaryStage.show();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

@@ -1,10 +1,7 @@
 package application;
 
 import java.io.IOException;
-
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -13,15 +10,17 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
+
 
 public class MainWindowController {
+	
+	private Control control;
 	
 	private int currentNumber;
 
 	@FXML private Button recentButton;
+	@FXML private Button randomButton;
 	@FXML private Button specifiedButton;
 	@FXML private Button prevButton;
 	@FXML private Button nextButton;
@@ -33,41 +32,15 @@ public class MainWindowController {
 	@FXML private Button favWindowButton;
 	@FXML private Label imgLabel;
 	
-	private Control control;
-	private FavoriteWindowController favoriteController;
-	private AnchorPane root1;
-	private Stage favStage;
-	
 	
 	@FXML
-	public void initialize() throws IOException {
-		
-		//Load fxml for FAVORITEWINDOW
-		FXMLLoader favoriteTab = new FXMLLoader();
-		favoriteTab.setLocation(Main.class.getResource("FavoriteWindow.fxml"));
-		root1 = favoriteTab.load();
-		favoriteController = favoriteTab.getController();
-		favoriteController.setMainController(this);		            
-
-		
-		//set FAVORITEWINDOW parameters
-		favStage = new Stage();
-        favStage.setScene(new Scene(root1));  
-        //set give Controller to FAVORITEWINDOW so it can call load()
-
-		
-		imageView.setPreserveRatio(true);
-		this.loadRecent();
-		
-		control = new Control();
-		
+	public void initialize() throws IOException {				
 		scrollPane.setFitToHeight(true);
 		scrollPane.setFitToWidth(true);
-		
 	}
 	
-	public Control getControl() {
-		return control;
+	public void setControl(Control control) {
+		this.control = control;
 	}
 	
 	@FXML
@@ -77,22 +50,6 @@ public class MainWindowController {
 	
 	public int getCurrentNumber() {
 		return currentNumber;
-	}
-	
-	public void closeFavorites() {
-		if(favStage.isShowing())
-			favStage.close();
-	}
-	
-	@FXML
-	public void showFavorites() {  
-		if(favStage.isShowing()) {
-            favStage.hide();
-		} else {
-	        favStage.setX(Main.getStage().getX() - 310);
-	        favStage.setY(Main.getStage().getY());
-			favStage.show();
-		}
 	}
 	
 	public void load(int number) {
@@ -106,8 +63,8 @@ public class MainWindowController {
 			numberField.setText(Integer.toString(number));
 			scrollPane.requestFocus();
 		} else {
-			System.out.println("Invalid Number");
 			numberField.clear();
+			numberField.setPromptText("Invalid Number");
 			
 		}
 	}
@@ -141,6 +98,20 @@ public class MainWindowController {
 	}
 	
 	@FXML
+	public void loadRandom() {
+		int max = Parser.getNewest();
+		int random = (int)(Math.random() * max +1);	
+		currentNumber = random;
+		
+		this.load(currentNumber);
+	}
+	
+	@FXML
+	public void showFavorites() {
+		control.showFavorites();
+	}
+	
+	@FXML
 	public void favorite() {
 		//get title
 		Parser parser = new Parser(currentNumber);
@@ -148,9 +119,9 @@ public class MainWindowController {
 		
 		Favorite fav = new Favorite(currentNumber, title);
 		if(control.addFavorite(fav)) {
-			favoriteController.newEntry(fav);
+			control.getFavController().newEntry(fav);
 		}else {
-			favoriteController.deleteEntry(fav);
+			control.getFavController().deleteEntry(fav);
 		}
 	}
 	

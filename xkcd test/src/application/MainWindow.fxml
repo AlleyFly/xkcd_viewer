@@ -9,7 +9,7 @@
 
 <AnchorPane prefHeight="750.0" prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainWindowController">
    <children>
-      <VBox alignment="CENTER" layoutY="618.0" spacing="30.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <VBox alignment="CENTER" layoutY="618.0" spacing="20.0" AnchorPane.bottomAnchor="30.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <children>
             <Label fx:id="imgLabel" alignment="CENTER" layoutX="253.0" layoutY="618.0" lineSpacing="5.0" text="Label" textAlignment="CENTER" wrapText="true" />
             <HBox alignment="CENTER" spacing="100.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
@@ -21,12 +21,13 @@
                         <HBox>
                            <children>
                               <Button fx:id="prevButton" focusTraversable="false" mnemonicParsing="false" onAction="#loadPrev" text="&lt;" />
-                              <TextField fx:id="numberField" focusTraversable="false" layoutX="382.0" layoutY="391.0" onAction="#loadNumber" promptText="Number" />
+                              <TextField fx:id="numberField" focusTraversable="false" layoutX="382.0" layoutY="391.0" onAction="#loadNumber" prefHeight="25.0" prefWidth="182.0" promptText="Number" />
                               <Button fx:id="nextButton" focusTraversable="false" mnemonicParsing="false" onAction="#loadNext" text="&gt;" />
                            </children>
                         </HBox>
                         <HBox alignment="CENTER">
                            <children>
+                              <Button fx:id="randomButton" mnemonicParsing="false" onAction="#loadRandom" text="Random" />
                               <Button fx:id="specifiedButton" alignment="CENTER" focusTraversable="false" layoutX="417.0" layoutY="432.0" mnemonicParsing="false" onAction="#loadNumber" text="load number" />
                               <Button fx:id="recentButton" focusTraversable="false" mnemonicParsing="false" onAction="#loadRecent" text="newest" />
                            </children>
