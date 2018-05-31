@@ -30,6 +30,7 @@ public class MainWindowController {
 	@FXML private ScrollPane scrollPane;
 	@FXML private StackPane stackPane;
 	@FXML private Button favWindowButton;
+	@FXML private Button saveButton;
 	@FXML private Label imgLabel;
 	
 	
@@ -104,6 +105,16 @@ public class MainWindowController {
 		currentNumber = random;
 		
 		this.load(currentNumber);
+	}
+	
+	@FXML
+	public void save() {
+		try {
+			control.speicher.saveImage(imageView.getImage(), currentNumber, Main.getStage().getTitle());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	@FXML

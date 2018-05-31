@@ -17,16 +17,19 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 public class Control {
-	ArrayList<Favorite> favorites;
-	MainWindowController mainController;
-	FavoriteWindowController favController;
+	private ArrayList<Favorite> favorites;
+	public  MainWindowController mainController;
+	public FavoriteWindowController favController;
+	public Speicher speicher;
 	
-	Stage primaryStage;
-	Stage favoriteStage;
+	private Stage primaryStage;
+	private Stage favoriteStage;
 	
 	public Control(Stage primaryStage) throws IOException {
 		
 		favorites = new ArrayList<Favorite>();
+		
+		speicher = new Speicher();
 		
 		//load MainWindow FXML
 		FXMLLoader loader = new FXMLLoader();
