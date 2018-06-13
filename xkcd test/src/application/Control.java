@@ -1,5 +1,7 @@
 package application;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -11,6 +13,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.TableView;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -29,7 +32,7 @@ public class Control {
 		
 		favorites = new ArrayList<Favorite>();
 		
-		speicher = new Speicher();
+		speicher = new Speicher(this);
 		
 		//load MainWindow FXML
 		FXMLLoader loader = new FXMLLoader();
@@ -80,6 +83,7 @@ public class Control {
 	        favoriteStage.setX(Main.getStage().getX() - 310);
 	        favoriteStage.setY(Main.getStage().getY());
 			favoriteStage.show();
+			favController.loadFavorites();
 		}
 	}
 	

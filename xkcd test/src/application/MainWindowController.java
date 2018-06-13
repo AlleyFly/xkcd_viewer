@@ -110,7 +110,7 @@ public class MainWindowController {
 	@FXML
 	public void save() {
 		try {
-			control.speicher.saveImage(imageView.getImage(), currentNumber, Main.getStage().getTitle());
+			control.speicher.saveImage(currentNumber, Main.getStage().getTitle());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
