@@ -2,12 +2,7 @@ package application;
 
 import java.awt.image.RenderedImage;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,13 +11,11 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
-import javafx.scene.image.Image;
-
 public class Speicher {
 
 	Path dirPath;
 	Path speicherPfad;
-	Map<Integer,Path> saved;
+	HashMap<Integer,Path> saved;
 	
 	Control control;
 	
@@ -52,25 +45,22 @@ public class Speicher {
 			speicherPfad = file.toPath();
 			System.out.println(speicherPfad.toString());
 			saved.put(number,speicherPfad);
-			this.writeMapFile();
+			writeSingleEntry();
 		}else {
 			System.out.println("Picture already saved");
 		}
 	}
 	
 	public void readMapFile() throws IOException, ClassNotFoundException {
-		File file = new File(dirPath.toString()+"/saved.index");
-		FileInputStream fis = new FileInputStream(file);
-		ObjectInputStream ois = new ObjectInputStream(fis);
-		saved = (HashMap<Integer,Path>) ois.readObject();
-		ois.close();
+		
 	}
 	
-	public void writeMapFile() throws IOException {
-		File file = new File(dirPath.toString()+"/saved.index");
-		FileOutputStream fos= new FileOutputStream(file);
-		ObjectOutputStream oos = new ObjectOutputStream(fos);
-		oos.writeObject(saved);
-		oos.close();
+	public void writeCompleteMapFile() throws IOException {
+		IndexWriter iWriter = new IndexWriter(saved);
+		iWriter.writeAll();
+	}
+	
+	public void writeSingleEntry(Map.Entry<Integer,Path> e) {
+		
 	}
 }
