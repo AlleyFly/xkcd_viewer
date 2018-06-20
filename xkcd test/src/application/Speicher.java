@@ -2,13 +2,21 @@ package application;
 
 import java.awt.image.RenderedImage;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.AbstractMap;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
+import javax.crypto.spec.OAEPParameterSpec;
 import javax.imageio.ImageIO;
 
 public class Speicher {
@@ -45,22 +53,47 @@ public class Speicher {
 			speicherPfad = file.toPath();
 			System.out.println(speicherPfad.toString());
 			saved.put(number,speicherPfad);
-			writeSingleEntry();
+			writeSingleEntry(new AbstractMap.SimpleEntry<Integer, Path>(number, speicherPfad));
 		}else {
 			System.out.println("Picture already saved");
 		}
 	}
 	
 	public void readMapFile() throws IOException, ClassNotFoundException {
-		
+		File index = new File("index.sav");
+		FileInputStream fis = new FileInputStream(index);
+		ObjectInputStream ois = new ObjectInputStream(fis);
+		HashMap<Integer,String> toRead = new HashMap<Integer,String>();
+		toRead = (HashMap<Integer,String>) ois.readObject();
+		ois.close();
+		Iterator it = toRead.entrySet().iterator();
+		while(it.hasNext()) {
+			Map.Entry pair = (Map.Entry) it.next();
+			saved.put(pair.getKey(), Paths.get(pair.getValue()));
+		}
 	}
 	
 	public void writeCompleteMapFile() throws IOException {
-		IndexWriter iWriter = new IndexWriter(saved);
-		iWriter.writeAll();
+		Map toSave = new HashMap();
+		File index = new File("index.sav");
+		FileOutputStream fos = new FileOutputStream(index);
+		ObjectOutputStream oos = new ObjectOutputStream(fos);	
+		Iterator it = saved.entrySet().iterator();
+		while(it.hasNext()) {
+			Map.Entry pair = (Map.Entry) it.next();
+			toSave.put(pair.getKey(), pair.getValue().toString());
+		}
+		oos.writeObject(toSave);
+		oos.close();
 	}
 	
-	public void writeSingleEntry(Map.Entry<Integer,Path> e) {
-		
+	public void writeSingleEntry(Map.Entry<Integer,Path> e) throws IOException {
+		File index = new File("index.sav");
+		FileOutputStream fos = new FileOutputStream(index);
+		ObjectOutputStream oos = new ObjectOutputStream(fos);
+		Map toSave = new HashMap();
+		toSave.put(e.getKey(),e.getValue().toString());
+		oos.writeObject(toSave);
+		oos.close();
 	}
 }
