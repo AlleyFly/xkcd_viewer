@@ -56,6 +56,7 @@ public class Speicher {
 			writeSingleEntry(new AbstractMap.SimpleEntry<Integer, Path>(number, speicherPfad));
 		}else {
 			System.out.println("Picture already saved");
+			printMap();
 		}
 	}
 	
@@ -69,7 +70,7 @@ public class Speicher {
 		Iterator it = toRead.entrySet().iterator();
 		while(it.hasNext()) {
 			Map.Entry pair = (Map.Entry) it.next();
-			saved.put(pair.getKey(), Paths.get(pair.getValue()));
+			saved.put((Integer)pair.getKey(), Paths.get((String)pair.getValue()));
 		}
 	}
 	
@@ -95,5 +96,13 @@ public class Speicher {
 		toSave.put(e.getKey(),e.getValue().toString());
 		oos.writeObject(toSave);
 		oos.close();
+	}
+	
+	private void printMap() {
+		Iterator it = saved.entrySet().iterator();
+		while(it.hasNext()) {
+			Map.Entry pair = (Map.Entry) it.next();
+			System.out.println("Key: "+pair.getKey()+"\tValue: "+pair.getValue());
+		}
 	}
 }
