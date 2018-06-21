@@ -32,12 +32,21 @@ public class Speicher {
 		this.dirPath = this.dirPath.normalize();
 		saved = new HashMap<Integer,Path>();
 		this.control = control;
+		readFolder();
 		try {
 			this.readMapFile();
 		} catch (ClassNotFoundException | IOException e) {
-			System.out.println("Oops");
+			System.out.println("Speicher Konstruktor Error");
 			e.printStackTrace();
 		}
+	}
+	
+	public boolean isSaved(int number) {
+		return saved.containsKey(number);
+	}
+	
+	public Path getPath(int number) {
+		return saved.get(number);
 	}
 	
 	public void saveImage(int number, String title) throws IOException {
@@ -47,7 +56,7 @@ public class Speicher {
 			Parser parser = new Parser(number);
 			URL imageURL = new URL(parser.parseImageURL());
 			RenderedImage image = ImageIO.read(imageURL);
-			File file = new File(dirPath.toString()+"/"+title);
+			File file = new File(dirPath.toString()+"/"+number+" - "+title+".jpeg");
 			ImageIO.write(image, "jpeg", file);
 			
 			speicherPfad = file.toPath();
@@ -55,7 +64,7 @@ public class Speicher {
 			saved.put(number,speicherPfad);
 			writeSingleEntry(new AbstractMap.SimpleEntry<Integer, Path>(number, speicherPfad));
 		}else {
-			System.out.println("Picture already saved");
+			System.out.println("Bild bereits gespeichert");
 			printMap();
 		}
 	}
@@ -98,11 +107,31 @@ public class Speicher {
 		oos.close();
 	}
 	
+	public void readFolder() {
+		saved.clear();
+		File folder = new File(dirPath.toString());
+		File[] fileList = folder.listFiles();
+		for(File file : fileList) {
+			if(file.isFile()) {
+				String toWork = file.getName();
+				String[] array = toWork.split(" - ");
+				saved.put(Integer.parseInt(array[0]), Paths.get(toWork).toAbsolutePath());
+			}
+		}
+		try {
+			writeCompleteMapFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		printMap();
+	}
+	
 	private void printMap() {
 		Iterator it = saved.entrySet().iterator();
+		System.out.println("Gespeicherte Bilder: ");
 		while(it.hasNext()) {
 			Map.Entry pair = (Map.Entry) it.next();
-			System.out.println("Key: "+pair.getKey()+"\tValue: "+pair.getValue());
+			System.out.println(pair.getKey()+"\t-\t"+pair.getValue());
 		}
 	}
 }

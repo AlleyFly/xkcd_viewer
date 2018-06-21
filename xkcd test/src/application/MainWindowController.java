@@ -55,12 +55,18 @@ public class MainWindowController {
 	
 	public void load(int number) {
 		if(number > 0 && number <= Parser.getNewest()) {
+			Image image;
 			Parser parser = new Parser(number);
-			Image image = new Image(parser.parseImageURL(),true);
+			if(control.speicher.isSaved(number)) {
+				System.out.println(control.speicher.getPath(number).toUri().toString());
+				image = new Image(control.speicher.getPath(number).toUri().toString(),true);
+			}else {
+				image = new Image(parser.parseImageURL(),true);
+			}
 			imageView.setImage(image);
 			Main.getStage().setTitle(parser.parseTitle());
 			imgLabel.setText(parser.parseAlt());
-			currentNumber = number; //not redundant, but for calling load from favorites
+			currentNumber = number;
 			numberField.setText(Integer.toString(number));
 			scrollPane.requestFocus();
 		} else {
@@ -112,7 +118,6 @@ public class MainWindowController {
 		try {
 			control.speicher.saveImage(currentNumber, Main.getStage().getTitle());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

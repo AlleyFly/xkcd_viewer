@@ -93,6 +93,11 @@ public class Control {
 	 */
 	public void closeFavorites() {
 		if(favoriteStage.isShowing())
+			try {
+				saveList();
+			} catch (IOException e) {
+				System.out.println("Failed to save Favorites to File");
+			}
 			favoriteStage.close();
 	}
 	
