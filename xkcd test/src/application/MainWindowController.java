@@ -58,8 +58,9 @@ public class MainWindowController {
 			Image image;
 			Parser parser = new Parser(number);
 			if(control.speicher.isSaved(number)) {
-				System.out.println(control.speicher.getPath(number).toUri().toString());
-				image = new Image(control.speicher.getPath(number).toUri().toString(),true);
+				String loaderURI = control.speicher.getPath(number).toUri().toString();
+				System.out.println(loaderURI);
+				image = new Image(loaderURI,true);
 			}else {
 				image = new Image(parser.parseImageURL(),true);
 			}
