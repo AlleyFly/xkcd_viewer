@@ -28,17 +28,13 @@ public class Speicher {
 	Control control;
 	
 	public Speicher(Control control) {
-		this.dirPath = Paths.get(Paths.get(".").toAbsolutePath().toString() + "/SavedImages");
+		
+		this.dirPath = Paths.get(Paths.get(".").toAbsolutePath().toString() + File.separator + "SavedImages");
 		this.dirPath = this.dirPath.normalize();
+		new File(dirPath.toString()).mkdirs();
 		saved = new HashMap<Integer,Path>();
 		this.control = control;
 		readFolder();
-		try {
-			this.readMapFile();
-		} catch (ClassNotFoundException | IOException e) {
-			System.out.println("Speicher Konstruktor Error");
-			e.printStackTrace();
-		}
 	}
 	
 	public boolean isSaved(int number) {
@@ -56,55 +52,16 @@ public class Speicher {
 			Parser parser = new Parser(number);
 			URL imageURL = new URL(parser.parseImageURL());
 			RenderedImage image = ImageIO.read(imageURL);
-			File file = new File(dirPath.toString()+"/"+number+" - "+title+".jpeg");
+			File file = new File(dirPath.toString()+File.separator+number+" - "+title+".jpeg");
 			ImageIO.write(image, "jpeg", file);
 			
 			speicherPfad = file.toPath();
-			System.out.println(speicherPfad.toString());
 			saved.put(number,speicherPfad);
-			writeSingleEntry(new AbstractMap.SimpleEntry<Integer, Path>(number, speicherPfad));
+			System.out.println("Bild gespeichert:\n"+number+"\t-\t"+speicherPfad);
 		}else {
 			System.out.println("Bild bereits gespeichert");
 			printMap();
 		}
-	}
-	
-	public void readMapFile() throws IOException, ClassNotFoundException {
-		File index = new File("index.sav");
-		FileInputStream fis = new FileInputStream(index);
-		ObjectInputStream ois = new ObjectInputStream(fis);
-		HashMap<Integer,String> toRead = new HashMap<Integer,String>();
-		toRead = (HashMap<Integer,String>) ois.readObject();
-		ois.close();
-		Iterator it = toRead.entrySet().iterator();
-		while(it.hasNext()) {
-			Map.Entry pair = (Map.Entry) it.next();
-			saved.put((Integer)pair.getKey(), Paths.get((String)pair.getValue()));
-		}
-	}
-	
-	public void writeCompleteMapFile() throws IOException {
-		Map toSave = new HashMap();
-		File index = new File("index.sav");
-		FileOutputStream fos = new FileOutputStream(index);
-		ObjectOutputStream oos = new ObjectOutputStream(fos);	
-		Iterator it = saved.entrySet().iterator();
-		while(it.hasNext()) {
-			Map.Entry pair = (Map.Entry) it.next();
-			toSave.put(pair.getKey(), pair.getValue().toString());
-		}
-		oos.writeObject(toSave);
-		oos.close();
-	}
-	
-	public void writeSingleEntry(Map.Entry<Integer,Path> e) throws IOException {
-		File index = new File("index.sav");
-		FileOutputStream fos = new FileOutputStream(index);
-		ObjectOutputStream oos = new ObjectOutputStream(fos);
-		Map toSave = new HashMap();
-		toSave.put(e.getKey(),e.getValue().toString());
-		oos.writeObject(toSave);
-		oos.close();
 	}
 	
 	public void readFolder() {
@@ -114,14 +71,9 @@ public class Speicher {
 		for(File file : fileList) {
 			if(file.isFile()) {
 				String toWork = file.getName();
-				String[] array = toWork.split(" - ");
-				saved.put(Integer.parseInt(array[0]), Paths.get(toWork).toAbsolutePath());
+				String[] array = toWork.split(" - ");			
+				saved.put(Integer.parseInt(array[0]), Paths.get(file.getAbsolutePath()));
 			}
-		}
-		try {
-			writeCompleteMapFile();
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 		printMap();
 	}

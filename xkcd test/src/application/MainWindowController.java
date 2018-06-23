@@ -1,5 +1,8 @@
 package application;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -58,9 +61,15 @@ public class MainWindowController {
 			Image image;
 			Parser parser = new Parser(number);
 			if(control.speicher.isSaved(number)) {
-				String loaderURI = control.speicher.getPath(number).toUri().toString();
-				System.out.println(loaderURI);
-				image = new Image(loaderURI,true);
+				try {
+					File file = new File(control.speicher.getPath(number).toUri());
+					FileInputStream in = new FileInputStream(file);
+					image = new Image(in);
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+					System.out.println("File imput for Image failed.\nloading from Web...");
+					image = new Image(parser.parseImageURL(),true);
+				}
 			}else {
 				image = new Image(parser.parseImageURL(),true);
 			}
