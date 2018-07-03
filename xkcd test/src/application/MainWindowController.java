@@ -21,6 +21,8 @@ public class MainWindowController {
 	private Control control;
 	
 	private int currentNumber;
+	private boolean isInternet;
+	private OfflineLoader offLoader;
 
 	@FXML private Button recentButton;
 	@FXML private Button randomButton;
@@ -38,7 +40,10 @@ public class MainWindowController {
 	
 	
 	@FXML
-	public void initialize() throws IOException {				
+	public void initialize() throws IOException {	
+		isInternet = Main.isInternet();
+		offLoader = new OfflineLoader();
+		
 		scrollPane.setFitToHeight(true);
 		scrollPane.setFitToWidth(true);
 	}
@@ -89,38 +94,53 @@ public class MainWindowController {
 	@FXML
 	public void loadNumber() {
 		currentNumber = Integer.parseInt(numberField.getText());
-		this.load(currentNumber);
+
+		if(isInternet)
+			this.load(currentNumber);
+		else
+			offLoader.loadNumber(currentNumber);
 	}
 	
 	@FXML
-	public void loadRecent() {				
-		currentNumber = Parser.getNewest();
-
-		this.load(currentNumber);
-		
+	public void loadRecent() {	
+		if(isInternet) {
+			currentNumber = Parser.getNewest();
+	
+			this.load(currentNumber);
+		}else
+			offLoader.loadRecent();
 	}
 	
 	@FXML
 	public void loadPrev() {
-		currentNumber--;
-		
-		this.load(currentNumber);
+		if(isInternet) {
+			currentNumber--;
+			
+			this.load(currentNumber);
+		}else
+			offLoader.loadPrev();
 	}
 	
 	@FXML
 	public void loadNext() {
-		currentNumber++;
-		
-		this.load(currentNumber);
+		if(isInternet) {
+			currentNumber++;
+			
+			this.load(currentNumber);
+		}else
+			offLoader.loadNext();
 	}
 	
 	@FXML
 	public void loadRandom() {
-		int max = Parser.getNewest();
-		int random = (int)(Math.random() * max +1);	
-		currentNumber = random;
-		
-		this.load(currentNumber);
+		if(isInternet) {
+			int max = Parser.getNewest();
+			int random = (int)(Math.random() * max +1);	
+			currentNumber = random;
+			
+			this.load(currentNumber);
+		}else
+			offLoader.loadRandom();
 	}
 	
 	@FXML

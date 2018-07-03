@@ -17,7 +17,6 @@ public class Parser {
 			jvalue = Json.parse(URLReader.readNewest());
 			jobject = jvalue.asObject();
 		}catch(Exception e) {
-			System.out.println("fuck");
 			e.printStackTrace();
 		}
 	}
@@ -71,7 +70,7 @@ public class Parser {
 	/**
 	 * Sucht Nummer des neusten Comics
 	 * 
-	 * @return Nummer des neusten als int, sonst 624
+	 * @return Nummer des neusten als int
 	 */
 	public static int getNewest() {
 		try {

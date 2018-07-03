@@ -5,8 +5,7 @@ import java.io.*;
 
 public class URLReader {
     
-    public static String readNewest() throws Exception {
-    	
+    public static String readNewest() throws IOException {
     	URL newest = new URL("https://xkcd.com/info.0.json");
     	BufferedReader in = new BufferedReader(
     			new InputStreamReader(newest.openStream()));
@@ -19,8 +18,6 @@ public class URLReader {
     }
     
     public static String readNo(int number) throws Exception {
-    	
-    	
     	URL url = new URL("https://xkcd.com/"+number+"/info.0.json");
     	BufferedReader in = new BufferedReader(
     			new InputStreamReader(url.openStream()));

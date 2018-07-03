@@ -1,7 +1,5 @@
 package application;
 
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -13,7 +11,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.TableView;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
@@ -32,12 +29,14 @@ public class Control {
 		
 		favorites = new ArrayList<Favorite>();
 		
-		speicher = new Speicher(this);
+		speicher = new Speicher();
+		
 		
 		//load MainWindow FXML
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(Main.class.getResource("MainWindow.fxml"));
 		AnchorPane root = loader.load();
+		
 		
 		mainController = loader.getController();
 		mainController.setControl(this);
@@ -58,7 +57,11 @@ public class Control {
 		this.favoriteStage = favStage;
 		
 		primaryStage.setScene(new Scene(root));
-		mainController.loadRecent();
+		if(Main.isInternet())
+			mainController.loadRecent();
+		else
+			System.out.println("kein Internet");
+		
 		
 		setListeners();
 		
@@ -156,9 +159,9 @@ public class Control {
 	
 	
 	/**
-	 * get all Favorites
+	 * Getter für Favoriten
 	 * 
-	 * @return favorites as array
+	 * @return Array of Favorites
 	 */
 	public Favorite[] getAllFavorites() {
 		return favorites.toArray(new Favorite[favorites.size()]);
@@ -166,7 +169,7 @@ public class Control {
 	
 	
 	/**
-	 * saves Favorites to external File "Favorites.sav"
+	 * Speichert Favoriten als File "Favorites.sav"
 	 * 
 	 * @throws IOException
 	 */
@@ -178,7 +181,7 @@ public class Control {
 	}
 	
 	/**
-	 * loads favorites from external File "Favorites.sav"
+	 * Läd Favoriten als Liste, aus File "Favorites.sav"
 	 * 
 	 * @throws ClassNotFoundException
 	 * @throws IOException

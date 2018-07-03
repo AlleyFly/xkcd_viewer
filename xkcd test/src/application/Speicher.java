@@ -2,21 +2,14 @@ package application;
 
 import java.awt.image.RenderedImage;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.crypto.spec.OAEPParameterSpec;
 import javax.imageio.ImageIO;
 
 public class Speicher {
@@ -25,15 +18,12 @@ public class Speicher {
 	Path speicherPfad;
 	HashMap<Integer,Path> saved;
 	
-	Control control;
-	
-	public Speicher(Control control) {
+	public Speicher() {
 		
 		this.dirPath = Paths.get(Paths.get(".").toAbsolutePath().toString() + File.separator + "SavedImages");
 		this.dirPath = this.dirPath.normalize();
 		new File(dirPath.toString()).mkdirs();
 		saved = new HashMap<Integer,Path>();
-		this.control = control;
 		readFolder();
 	}
 	
