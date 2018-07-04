@@ -9,6 +9,7 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 
@@ -31,14 +32,16 @@ public class Speicher {
 		return saved.containsKey(number);
 	}
 	
+	public Set<Integer> getKeys(){
+		return saved.keySet();
+	}
+	
 	public Path getPath(int number) {
 		return saved.get(number);
 	}
 	
 	public void saveImage(int number, String title) throws IOException {
 		if(!saved.containsKey(number)) {
-			
-			//save Image
 			Parser parser = new Parser(number);
 			URL imageURL = new URL(parser.parseImageURL());
 			RenderedImage image = ImageIO.read(imageURL);

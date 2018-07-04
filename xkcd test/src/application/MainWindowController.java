@@ -42,7 +42,7 @@ public class MainWindowController {
 	@FXML
 	public void initialize() throws IOException {	
 		isInternet = Main.isInternet();
-		offLoader = new OfflineLoader();
+		offLoader = new OfflineLoader(this);
 		
 		scrollPane.setFitToHeight(true);
 		scrollPane.setFitToWidth(true);
