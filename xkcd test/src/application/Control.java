@@ -20,17 +20,13 @@ public class Control {
 	private ArrayList<Favorite> favorites;
 	public  MainWindowController mainController;
 	public FavoriteWindowController favController;
-	public Speicher speicher;
-	
+
 	private Stage primaryStage;
 	private Stage favoriteStage;
 	
 	public Control(Stage primaryStage) throws IOException {
 		
-		favorites = new ArrayList<Favorite>();
-		
-		speicher = new Speicher();
-		
+		favorites = new ArrayList<Favorite>();		
 		
 		//load MainWindow FXML
 		FXMLLoader loader = new FXMLLoader();

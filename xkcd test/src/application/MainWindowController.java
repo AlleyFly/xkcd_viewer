@@ -19,11 +19,11 @@ import javafx.scene.layout.StackPane;
 public class MainWindowController {
 	
 	private Control control;
+	private OfflineLoader offLoader;
 	
 	private int currentNumber;
 	private boolean isInternet;
-	private OfflineLoader offLoader;
-
+	
 	@FXML private Button recentButton;
 	@FXML private Button randomButton;
 	@FXML private Button specifiedButton;
@@ -61,13 +61,26 @@ public class MainWindowController {
 		return currentNumber;
 	}
 	
+	public void loadOffline(int number) {
+		try {
+			File file = new File(offLoader.speicher.getPath(number).toUri());
+			FileInputStream in = new FileInputStream(file);
+			Image image = new Image(in);
+			imageView.setImage(image);
+			numberField.setText(Integer.toString(number));
+			scrollPane.requestFocus();
+		}catch(Exception e) {
+			System.out.println("Load failed");
+		}
+	}
+	
 	public void load(int number) {
 		if(number > 0 && number <= Parser.getNewest()) {
 			Image image;
 			Parser parser = new Parser(number);
-			if(control.speicher.isSaved(number)) {
+			if(offLoader.speicher.isSaved(number)) {
 				try {
-					File file = new File(control.speicher.getPath(number).toUri());
+					File file = new File(offLoader.speicher.getPath(number).toUri());
 					FileInputStream in = new FileInputStream(file);
 					image = new Image(in);
 				} catch (FileNotFoundException e) {
@@ -78,6 +91,7 @@ public class MainWindowController {
 			}else {
 				image = new Image(parser.parseImageURL(),true);
 			}
+			
 			imageView.setImage(image);
 			Main.getStage().setTitle(parser.parseTitle());
 			imgLabel.setText(parser.parseAlt());
@@ -146,7 +160,7 @@ public class MainWindowController {
 	@FXML
 	public void save() {
 		try {
-			control.speicher.saveImage(currentNumber, Main.getStage().getTitle());
+			offLoader.speicher.saveImage(currentNumber, Main.getStage().getTitle());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
