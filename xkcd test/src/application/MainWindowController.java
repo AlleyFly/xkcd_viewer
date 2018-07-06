@@ -57,8 +57,17 @@ public class MainWindowController {
 		return numberField;
 	}
 	
+	@FXML
+	public ScrollPane getScrollPane() {
+		return scrollPane;
+	}
+	
 	public int getCurrentNumber() {
 		return currentNumber;
+	}
+	
+	public OfflineLoader getOfflineLoader() {
+		return offLoader;
 	}
 	
 	public void loadOffline(int number) {

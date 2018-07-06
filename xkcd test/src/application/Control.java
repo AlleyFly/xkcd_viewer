@@ -56,7 +56,7 @@ public class Control {
 		if(Main.isInternet())
 			mainController.loadRecent();
 		else
-			System.out.println("kein Internet");
+			mainController.getOfflineLoader().loadRecent();
 		
 		
 		setListeners();

@@ -24,6 +24,10 @@ public class OfflineLoader {
 		Arrays.sort(savedKeys);
 		for(int e : savedKeys) System.out.println(e);
 	}
+	
+	public int[] getSavedKeys() {
+		return savedKeys;
+	}
 
 	public void loadRecent() {
 		iKey = savedKeys.length-1;
@@ -31,11 +35,21 @@ public class OfflineLoader {
 	}
 	
 	public void loadPrev() {
-		mainWindowController.loadOffline(savedKeys[--iKey]);
+		try {
+			mainWindowController.loadOffline(savedKeys[--iKey]);
+		}catch(ArrayIndexOutOfBoundsException e) {
+			mainWindowController.getTextField().setText("oldest Picture reached");
+			iKey++;
+		}
 	}
 	
 	public void loadNext() {
-		mainWindowController.loadOffline(savedKeys[++iKey]);
+		try {
+			mainWindowController.loadOffline(savedKeys[++iKey]);
+		}catch(ArrayIndexOutOfBoundsException e) {
+			mainWindowController.getTextField().setText("newest Picture reached");
+			iKey--;
+		}
 	}
 	
 	public void loadRandom() {
@@ -48,6 +62,7 @@ public class OfflineLoader {
 			mainWindowController.loadOffline(number);
 		}else {
 			mainWindowController.getTextField().setText("Not available offline");
+			mainWindowController.getScrollPane().requestFocus();
 		}
 	}
 	
