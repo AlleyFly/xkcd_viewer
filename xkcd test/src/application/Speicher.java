@@ -6,77 +6,79 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-
 import javax.imageio.ImageIO;
 
 public class Speicher {
 
 	Path dirPath;
 	Path speicherPfad;
-	HashMap<Integer,Path> saved;
 	
-	public Speicher() {
+	Control control;
+	
+	public Speicher(Control control) {
 		
 		this.dirPath = Paths.get(Paths.get(".").toAbsolutePath().toString() + File.separator + "SavedImages");
 		this.dirPath = this.dirPath.normalize();
 		new File(dirPath.toString()).mkdirs();
-		saved = new HashMap<Integer,Path>();
-		readFolder();
+		this.control = control;
+		//readFolder();
 	}
 	
-	public boolean isSaved(int number) {
-		return saved.containsKey(number);
+	public boolean isSaved(XKCD xkcd) {
+		return control.getFavorites().contains(xkcd);
 	}
 	
-	public Set<Integer> getKeys(){
-		return saved.keySet();
+	public Iterator<XKCD> getIterator(){
+		return control.getFavorites().iterator();
 	}
 	
 	public Path getPath(int number) {
-		return saved.get(number);
+		XKCD comp = new XKCD(number);
+		int index = control.getFavorites().indexOf(comp);
+		return control.getFavorites().get(index).getPath();
 	}
 	
-	public void saveImage(int number, String title) throws IOException {
-		if(!saved.containsKey(number)) {
-			Parser parser = new Parser(number);
-			URL imageURL = new URL(parser.parseImageURL());
-			RenderedImage image = ImageIO.read(imageURL);
-			File file = new File(dirPath.toString()+File.separator+number+" - "+title+".jpeg");
-			ImageIO.write(image, "jpeg", file);
-			
-			speicherPfad = file.toPath();
-			saved.put(number,speicherPfad);
-			System.out.println("Bild gespeichert:\n"+number+"\t-\t"+speicherPfad);
-		}else {
-			System.out.println("Bild bereits gespeichert");
-			printMap();
-		}
+	public Path saveImage(int number, String title) throws IOException {
+		Parser parser = new Parser(number);
+		URL imageURL = new URL(parser.parseImageURL());
+		RenderedImage image = ImageIO.read(imageURL);
+		File file = new File(dirPath.toString()+File.separator+number+" - "+title+".jpeg");
+		ImageIO.write(image, "jpeg", file);
+		
+		speicherPfad = file.toPath();
+		
+		System.out.println("Bild gespeichert:\n"+number+"\t-\t"+speicherPfad);
+		return speicherPfad;
 	}
 	
+	/**
+	 * Liest Bilder aus altem Speichersystem ein
+	 * (Favoriten und gespeicherte Bilder waren getrennt)
+	 */
+	@Deprecated
 	public void readFolder() {
-		saved.clear();
+		control.getFavorites().clear();
 		File folder = new File(dirPath.toString());
 		File[] fileList = folder.listFiles();
 		for(File file : fileList) {
 			if(file.isFile()) {
 				String toWork = file.getName();
-				String[] array = toWork.split(" - ");			
-				saved.put(Integer.parseInt(array[0]), Paths.get(file.getAbsolutePath()));
+				String[] array = toWork.split(" - ");	
+				Parser parser = new Parser(Integer.parseInt(array[0]));
+				control.getFavorites().add(new XKCD(Integer.parseInt(array[0]),parser.parseTitle(),parser.parseAlt(), Paths.get(file.getAbsolutePath())));
 			}
 		}
 		printMap();
 	}
 	
-	private void printMap() {
-		Iterator it = saved.entrySet().iterator();
+	public void printMap() {
 		System.out.println("Gespeicherte Bilder: ");
-		while(it.hasNext()) {
-			Map.Entry pair = (Map.Entry) it.next();
-			System.out.println(pair.getKey()+"\t-\t"+pair.getValue());
+		if(control.getFavorites().isEmpty())
+			System.out.println("\tkeine Bilder gespeichert");
+		for(XKCD x : control.getFavorites()) {
+			System.out.println(x.getNumber() + "\t-\t" + x.getPath().toString());
 		}
 	}
 }

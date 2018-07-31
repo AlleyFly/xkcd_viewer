@@ -1,50 +1,49 @@
 package application;
 
-import java.util.Arrays;
-import java.util.Set;
-import java.util.stream.IntStream;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class OfflineLoader {
 
 	private MainWindowController mainWindowController;
 	public Speicher speicher;
-	private int[] savedKeys;
+	private ArrayList<Integer> savedKeys;
 	private int iKey;
 	
-	public OfflineLoader(MainWindowController mainController) {
+	
+	//Problemfaktor
+	public OfflineLoader(MainWindowController mainController, Speicher speicher) {
 		mainWindowController = mainController;
-		speicher = new Speicher();
-		Set<Integer> keys = speicher.getKeys();
-		savedKeys = new int[keys.size()];
-		int i=0;
-		for(Integer s : keys) {
-			savedKeys[i] = s;
-			i++;
-		}
-		Arrays.sort(savedKeys);
+		//speicher = new Speicher();
+		this.speicher = speicher;
+		Iterator<XKCD> keys = speicher.getIterator();
+		savedKeys = new ArrayList<Integer>();
+		keys.forEachRemaining(e -> savedKeys.add(e.getNumber()));
+		System.out.println("saved Keys");
 		for(int e : savedKeys) System.out.println(e);
+		iKey = savedKeys.size();
 	}
 
 	public void loadRecent() {
-		iKey = savedKeys.length-1;
-		mainWindowController.loadOffline(savedKeys[iKey]);
+		iKey = savedKeys.size();
+		mainWindowController.loadOffline(savedKeys.get(iKey));
 	}
 	
 	public void loadPrev() {
-		mainWindowController.loadOffline(savedKeys[--iKey]);
+		mainWindowController.loadOffline(savedKeys.get(--iKey));
 	}
 	
 	public void loadNext() {
-		mainWindowController.loadOffline(savedKeys[++iKey]);
+		mainWindowController.loadOffline(savedKeys.get(++iKey));
 	}
 	
 	public void loadRandom() {
-		int rand = (int) (Math.random() * savedKeys.length);
-		mainWindowController.loadOffline(savedKeys[rand]);
+		int rand = (int) (Math.random() * savedKeys.size());
+		mainWindowController.loadOffline(savedKeys.get(rand));
 	}
 	
 	public void loadNumber(int number) {
-		if(IntStream.of(savedKeys).anyMatch(x -> x == number)) {
+		if(savedKeys.contains(number)) {
 			mainWindowController.loadOffline(number);
 		}else {
 			mainWindowController.getTextField().setText("Not available offline");

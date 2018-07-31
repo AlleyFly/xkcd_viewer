@@ -35,12 +35,12 @@ public class FavoriteWindowController {
 	}
 	
 	@FXML
-	public void newEntry(Favorite fav) {
+	public void newEntry(XKCD fav) {
 		tabFavorites.getItems().add(fav);
 	}
 	
 	@FXML
-	public void deleteEntry(Favorite fav) {
+	public void deleteEntry(XKCD fav) {
 		tabFavorites.getItems().remove(fav);
 	}
 	
@@ -49,8 +49,9 @@ public class FavoriteWindowController {
 		try {
 			control.saveList();
 		} catch (IOException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 			System.out.println("couldn't save Favorites");
+			e.printStackTrace();
 		}
 	}
 	
@@ -60,8 +61,8 @@ public class FavoriteWindowController {
 			tabFavorites.getItems().clear();
 			tabFavorites.getItems().addAll(control.loadList());
 		} catch (IOException | ClassNotFoundException e) {
-			e.printStackTrace();
-			System.out.println("couldn't load Favorites");
+			//e.printStackTrace();
+			System.out.println("\"Favorites.sav\" konnte nicht gefunden werden");
 		}
 	}
 

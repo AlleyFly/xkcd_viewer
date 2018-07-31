@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Path;
+
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -42,7 +44,6 @@ public class MainWindowController {
 	@FXML
 	public void initialize() throws IOException {	
 		isInternet = Main.isInternet();
-		offLoader = new OfflineLoader(this);
 		
 		scrollPane.setFitToHeight(true);
 		scrollPane.setFitToWidth(true);
@@ -50,6 +51,10 @@ public class MainWindowController {
 	
 	public void setControl(Control control) {
 		this.control = control;
+	}
+	
+	public void setOfflineLoader(OfflineLoader offLoader) {
+		this.offLoader = offLoader;
 	}
 	
 	@FXML
@@ -71,6 +76,7 @@ public class MainWindowController {
 			scrollPane.requestFocus();
 		}catch(Exception e) {
 			System.out.println("Load failed");
+			e.printStackTrace();
 		}
 	}
 	
@@ -78,7 +84,7 @@ public class MainWindowController {
 		if(number > 0 && number <= Parser.getNewest()) {
 			Image image;
 			Parser parser = new Parser(number);
-			if(offLoader.speicher.isSaved(number)) {
+			if(offLoader.speicher.isSaved(new XKCD(number))) {
 				try {
 					File file = new File(offLoader.speicher.getPath(number).toUri());
 					FileInputStream in = new FileInputStream(file);
@@ -158,30 +164,29 @@ public class MainWindowController {
 	}
 	
 	@FXML
-	public void save() {
-		try {
-			offLoader.speicher.saveImage(currentNumber, Main.getStage().getTitle());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	@FXML
 	public void showFavorites() {
 		control.showFavorites();
 	}
 	
 	@FXML
 	public void favorite() {
-		//get title
-		Parser parser = new Parser(currentNumber);
-		String title = parser.parseTitle();
-		
-		Favorite fav = new Favorite(currentNumber, title);
-		if(control.addFavorite(fav)) {
-			control.getFavController().newEntry(fav);
-		}else {
-			control.getFavController().deleteEntry(fav);
+		try {
+			//get title
+			Parser parser = new Parser(currentNumber);
+			String title = parser.parseTitle();
+
+			XKCD fav = new XKCD(currentNumber,title);
+			
+			if(control.addFavorite(fav)) {
+				Path path = offLoader.speicher.saveImage(currentNumber, title);
+				fav.setAlt(parser.parseAlt());
+				fav.setPath(path);
+				control.getFavController().newEntry(fav);
+			}else {
+				control.getFavController().deleteEntry(fav);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -190,6 +195,15 @@ public class MainWindowController {
 		if(event.getCode() == KeyCode.ENTER) {
 			favorite();
 		}
+	}
+	
+	@FXML
+	public void debug() {
+		control.printFavorites();
+		System.out.println("Control favorites");
+		control.speicher.printMap();
+		System.out.println("offLoader favorites");
+		offLoader.speicher.printMap();
 	}
 	
 }

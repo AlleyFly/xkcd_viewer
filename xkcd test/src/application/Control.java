@@ -17,16 +17,19 @@ import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
 public class Control {
-	private ArrayList<Favorite> favorites;
+	private ArrayList<XKCD> favorites;
+	
 	public  MainWindowController mainController;
 	public FavoriteWindowController favController;
+	public OfflineLoader offLoader;
+	public Speicher speicher;
 
 	private Stage primaryStage;
 	private Stage favoriteStage;
 	
 	public Control(Stage primaryStage) throws IOException {
 		
-		favorites = new ArrayList<Favorite>();		
+		favorites = new ArrayList<XKCD>();		
 		
 		//load MainWindow FXML
 		FXMLLoader loader = new FXMLLoader();
@@ -35,7 +38,16 @@ public class Control {
 		
 		
 		mainController = loader.getController();
+		
+		speicher = new Speicher(this);
+		offLoader = new OfflineLoader(mainController, speicher);
+		
+		mainController.setOfflineLoader(offLoader);
 		mainController.setControl(this);
+		
+		
+		
+		
 		
 		//load FavWindow FXML
 		FXMLLoader favoriteTab = new FXMLLoader();
@@ -52,14 +64,21 @@ public class Control {
 		this.primaryStage = primaryStage;
 		this.favoriteStage = favStage;
 		
-		primaryStage.setScene(new Scene(root));
+		primaryStage.setScene(new Scene(root));		
+		
+		setListeners();
+		
+		
+		try {
+			loadList();
+		} catch (ClassNotFoundException e) {
+			System.out.println("initial Favload failed");
+		}
+		
 		if(Main.isInternet())
 			mainController.loadRecent();
 		else
-			System.out.println("kein Internet");
-		
-		
-		setListeners();
+			;
 		
 		primaryStage.show();
 	}
@@ -108,9 +127,9 @@ public class Control {
 		//Click Favorites in Table to load them
 		TableView tabFavorites = favController.getTable();
 		tabFavorites.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-		    if (newSelection != null) {
-		    	Favorite fav = (Favorite) tabFavorites.getSelectionModel().getSelectedItem();
-		    	mainController.load(fav.getNumber());
+		    if (newSelection != oldSelection) {
+		    	XKCD fav = (XKCD) tabFavorites.getSelectionModel().getSelectedItem();
+		    	mainController.loadOffline(fav.getNumber());
 		    }
 		});
 		
@@ -143,7 +162,7 @@ public class Control {
 	 * @param fav Favorite to add
 	 * @return true if its a new Favorite, false if it is already a Favorite
 	 */
-	public boolean addFavorite(Favorite fav) {
+	public boolean addFavorite(XKCD fav) {
 		if(favorites.contains(fav)) {
 			favorites.remove(fav);
 			return false;
@@ -159,8 +178,8 @@ public class Control {
 	 * 
 	 * @return Array of Favorites
 	 */
-	public Favorite[] getAllFavorites() {
-		return favorites.toArray(new Favorite[favorites.size()]);
+	public ArrayList<XKCD> getFavorites() {
+		return favorites;
 	}
 	
 	
@@ -182,12 +201,21 @@ public class Control {
 	 * @throws ClassNotFoundException
 	 * @throws IOException
 	 */
-	public ArrayList<Favorite> loadList() throws ClassNotFoundException, IOException {
+	public ArrayList<XKCD> loadList() throws ClassNotFoundException, IOException {
 		FileInputStream fis = new FileInputStream("Favorites.sav");
 		ObjectInputStream ois = new ObjectInputStream(fis);
-		favorites = (ArrayList<Favorite>) ois.readObject();
+		favorites = (ArrayList<XKCD>) ois.readObject();
 		ois.close();
 		return favorites;
 	}
-
+	
+	/**
+	 * Gibt alle Favoriten aus
+	 * Für Debug Zwecke
+	 */
+	public void printFavorites() {
+		for(XKCD x : favorites) {
+			System.out.println(x.getNumber()+" - "+x.getTitle()+" - "+x.getPath());
+		}
+	}
 }
