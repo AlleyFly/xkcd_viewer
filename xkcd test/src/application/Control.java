@@ -1,5 +1,6 @@
 package application;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -29,7 +30,15 @@ public class Control {
 	
 	public Control(Stage primaryStage) throws IOException {
 		
-		favorites = new ArrayList<XKCD>();		
+		favorites = new ArrayList<XKCD>();	
+		
+		try {
+			loadList();
+		} catch (java.io.FileNotFoundException e) {
+			saveList();
+		} catch (ClassNotFoundException e) {
+			System.out.println("Corrupted Savefile for Favorites (ClassNotFoundException)");
+		}
 		
 		//load MainWindow FXML
 		FXMLLoader loader = new FXMLLoader();
@@ -68,19 +77,13 @@ public class Control {
 		
 		setListeners();
 		
-		
-		try {
-			loadList();
-		} catch (ClassNotFoundException e) {
-			System.out.println("initial Favload failed");
-		}
-		
 		if(Main.isInternet())
 			mainController.loadRecent();
 		else
 			;
 		
 		primaryStage.show();
+		openFavorites();
 	}
 	
 	public MainWindowController getMainController() {
@@ -92,13 +95,25 @@ public class Control {
 	}
 	
 	/**
-	 * show or hide the Favorite Window
+	 * toggle the Favorite Window
 	 */
 	public void showFavorites() {  
 		if(favoriteStage.isShowing()) {
             favoriteStage.hide();
 		} else {
 	        favoriteStage.setX(Main.getStage().getX() - 310);
+	        favoriteStage.setY(Main.getStage().getY());
+			favoriteStage.show();
+			favController.loadFavorites();
+		}
+	}
+	
+	/**
+	 * Favoriten-Tab oeffnen
+	 */
+	public void openFavorites() {
+		if(!favoriteStage.isShowing()) {
+			favoriteStage.setX(Main.getStage().getX() - 310);
 	        favoriteStage.setY(Main.getStage().getY());
 			favoriteStage.show();
 			favController.loadFavorites();

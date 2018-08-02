@@ -13,7 +13,6 @@ import javax.imageio.ImageIO;
 public class Speicher {
 
 	Path dirPath;
-	Path speicherPfad;
 	
 	Control control;
 	
@@ -47,7 +46,7 @@ public class Speicher {
 		File file = new File(dirPath.toString()+File.separator+number+" - "+title+".jpeg");
 		ImageIO.write(image, "jpeg", file);
 		
-		speicherPfad = file.toPath();
+		Path speicherPfad = file.toPath();
 		
 		System.out.println("Bild gespeichert:\n"+number+"\t-\t"+speicherPfad);
 		return speicherPfad;

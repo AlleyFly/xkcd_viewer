@@ -8,6 +8,7 @@ import java.nio.file.Path;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
@@ -39,6 +40,7 @@ public class MainWindowController {
 	@FXML private Button favWindowButton;
 	@FXML private Button saveButton;
 	@FXML private Label imgLabel;
+	@FXML private CheckBox offlineCheckbox;
 	
 	
 	@FXML
@@ -188,6 +190,14 @@ public class MainWindowController {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	@FXML
+	public void switchNetworkMode() {
+		if(offlineCheckbox.isSelected())
+			isInternet = false;
+		else
+			isInternet = true;
 	}
 	
 	@FXML
