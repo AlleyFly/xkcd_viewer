@@ -15,7 +15,7 @@ public class OfflineLoader {
 	public OfflineLoader(MainWindowController mainController, Speicher speicher) {
 		mainWindowController = mainController;
 		//speicher = new Speicher();
-		this.speicher = speicher;
+		this.speicher = speicher; //evtl fehler durch lok. kopie statt pointer?
 		Iterator<XKCD> keys = speicher.getIterator();
 		savedKeys = new ArrayList<Integer>();
 		keys.forEachRemaining(e -> savedKeys.add(e.getNumber()));
