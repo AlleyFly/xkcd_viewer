@@ -47,6 +47,11 @@ public class MainWindowController {
 	public void initialize() throws IOException {	
 		isInternet = Main.isInternet();
 		
+		if(!isInternet) {
+			offlineCheckbox.fire();
+			offlineCheckbox.disableProperty().set(true);
+		}
+		
 		scrollPane.setFitToHeight(true);
 		scrollPane.setFitToWidth(true);
 	}
@@ -58,10 +63,13 @@ public class MainWindowController {
 	public void setOfflineLoader(OfflineLoader offLoader) {
 		this.offLoader = offLoader;
 	}
-	
-	@FXML
+
 	public TextField getTextField() {
 		return numberField;
+	}
+	
+	public ScrollPane getScrollPane() {
+		return scrollPane;
 	}
 	
 	public int getCurrentNumber() {
@@ -70,11 +78,14 @@ public class MainWindowController {
 	
 	public void loadOffline(int number) {
 		try {
+			currentNumber = number;
 			File file = new File(offLoader.speicher.getPath(number).toUri());
 			FileInputStream in = new FileInputStream(file);
 			Image image = new Image(in);
 			imageView.setImage(image);
 			numberField.setText(Integer.toString(number));
+			imgLabel.setText(offLoader.speicher.getAlt(number));
+			Main.getStage().setTitle(offLoader.speicher.getTitle(number));
 			scrollPane.requestFocus();
 		}catch(Exception e) {
 			System.out.println("Load failed");
@@ -172,23 +183,33 @@ public class MainWindowController {
 	
 	@FXML
 	public void favorite() {
-		try {
-			//get title
-			Parser parser = new Parser(currentNumber);
-			String title = parser.parseTitle();
-
-			XKCD fav = new XKCD(currentNumber,title);
-			
+		if(isInternet) {
+			try {
+				//get title
+				Parser parser = new Parser(currentNumber);
+				String title = parser.parseTitle();
+	
+				XKCD fav = new XKCD(currentNumber,title);
+				
+				if(control.addFavorite(fav)) {
+					Path path = offLoader.speicher.saveImage(currentNumber, title);
+					fav.setAlt(parser.parseAlt());
+					fav.setPath(path);
+					control.getFavController().newEntry(fav);
+				}else {
+					control.getFavController().deleteEntry(fav);
+				}
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+		}else {
+			XKCD fav = new XKCD(currentNumber);
 			if(control.addFavorite(fav)) {
-				Path path = offLoader.speicher.saveImage(currentNumber, title);
-				fav.setAlt(parser.parseAlt());
-				fav.setPath(path);
-				control.getFavController().newEntry(fav);
+				System.out.println("Neue Favoriten können im Offline Modus nicht hinzugefügt werden...");
+				control.addFavorite(fav);
 			}else {
 				control.getFavController().deleteEntry(fav);
 			}
-		}catch(Exception e) {
-			e.printStackTrace();
 		}
 	}
 	
@@ -201,14 +222,8 @@ public class MainWindowController {
 	}
 	
 	@FXML
-	public void handleEnter(KeyEvent event) {
-		if(event.getCode() == KeyCode.ENTER) {
-			favorite();
-		}
-	}
-	
-	@FXML
 	public void debug() {
+		System.out.println("Network-Mode: "+isInternet);
 		control.printFavorites();
 		System.out.println("Control favorites");
 		control.speicher.printMap();

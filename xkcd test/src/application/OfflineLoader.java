@@ -24,22 +24,42 @@ public class OfflineLoader {
 		iKey = savedKeys.size();
 	}
 
-	public void loadRecent() {
-		iKey = savedKeys.size();
-		mainWindowController.loadOffline(savedKeys.get(iKey));
+	public int loadRecent() {
+		iKey = savedKeys.size()-1;
+		int currentNumber = savedKeys.get(iKey);
+		mainWindowController.loadOffline(currentNumber);
+		return currentNumber;
 	}
 	
-	public void loadPrev() {
-		mainWindowController.loadOffline(savedKeys.get(--iKey));
+	public int loadPrev() {
+		try {
+			int currentNumber = savedKeys.get(--iKey);
+			mainWindowController.loadOffline(currentNumber);
+			return currentNumber;
+		}catch(IndexOutOfBoundsException e) {
+			System.out.println("Reached first favorite");
+			iKey++;
+			return savedKeys.get(0);
+		}
 	}
 	
-	public void loadNext() {
-		mainWindowController.loadOffline(savedKeys.get(++iKey));
+	public int loadNext() {
+		try {
+			int currentNumber = savedKeys.get(++iKey);
+			mainWindowController.loadOffline(currentNumber);
+			return currentNumber;
+		}catch(IndexOutOfBoundsException e) {
+			System.out.println("Reached last favorite");
+			iKey--;
+			return savedKeys.get(savedKeys.size()-1);
+		}
 	}
 	
-	public void loadRandom() {
+	public int loadRandom() {
 		int rand = (int) (Math.random() * savedKeys.size());
-		mainWindowController.loadOffline(savedKeys.get(rand));
+		int currentNumber = savedKeys.get(rand);
+		mainWindowController.loadOffline(currentNumber);
+		return currentNumber;
 	}
 	
 	public void loadNumber(int number) {
@@ -47,6 +67,7 @@ public class OfflineLoader {
 			mainWindowController.loadOffline(number);
 		}else {
 			mainWindowController.getTextField().setText("Not available offline");
+			mainWindowController.getScrollPane().requestFocus();
 		}
 	}
 	

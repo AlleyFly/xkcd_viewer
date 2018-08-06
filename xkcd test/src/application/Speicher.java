@@ -39,6 +39,18 @@ public class Speicher {
 		return control.getFavorites().get(index).getPath();
 	}
 	
+	public String getAlt(int number) {
+		XKCD comp = new XKCD(number);
+		int index = control.getFavorites().indexOf(comp);
+		return control.getFavorites().get(index).getAlt();
+	}
+	
+	public String getTitle(int number) {
+		XKCD comp = new XKCD(number);
+		int index = control.getFavorites().indexOf(comp);
+		return control.getFavorites().get(index).getTitle();
+	}
+	
 	public Path saveImage(int number, String title) throws IOException {
 		Parser parser = new Parser(number);
 		URL imageURL = new URL(parser.parseImageURL());

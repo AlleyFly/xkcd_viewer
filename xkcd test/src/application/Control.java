@@ -80,7 +80,7 @@ public class Control {
 		if(Main.isInternet())
 			mainController.loadRecent();
 		else
-			;
+			offLoader.loadRecent();
 		
 		primaryStage.show();
 		openFavorites();
@@ -117,6 +117,7 @@ public class Control {
 	        favoriteStage.setY(Main.getStage().getY());
 			favoriteStage.show();
 			favController.loadFavorites();
+			primaryStage.requestFocus();
 		}
 	}
 	
@@ -165,6 +166,8 @@ public class Control {
 					mainController.getTextField().requestFocus();
 				else if(event.getCode() == KeyCode.NUMPAD8)
 					mainController.loadRecent();
+				else if(event.getCode() == KeyCode.ENTER)
+					mainController.favorite();
 			}
 		});
 	}

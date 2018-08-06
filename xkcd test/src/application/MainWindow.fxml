@@ -16,7 +16,7 @@
                <children>
                   <Button fx:id="favWindowButton" focusTraversable="false" mnemonicParsing="false" onAction="#showFavorites" text="Favoriten ein/ausklappen" />
                   <Button fx:id="saveButton" mnemonicParsing="false" onAction="#debug" text="Debug" />
-                  <Button fx:id="favButton" focusTraversable="false" mnemonicParsing="false" onAction="#favorite" onKeyPressed="#handleEnter" text="Un/Favorite" />
+                  <Button fx:id="favButton" focusTraversable="false" mnemonicParsing="false" onAction="#favorite" text="Un/Favorite" />
                   <VBox alignment="CENTER" layoutX="382.0" layoutY="391.0">
                      <children>
                         <HBox>
