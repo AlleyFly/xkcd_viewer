@@ -6,10 +6,14 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Iterator;
 import javax.imageio.ImageIO;
 
+/**
+ * Klasse zum Speichern und auslesen der Favoritenliste
+ * @author je
+ *
+ */
 public class Speicher {
 
 	Path dirPath;
@@ -65,8 +69,7 @@ public class Speicher {
 	}
 	
 	/**
-	 * Liest Bilder aus altem Speichersystem ein
-	 * (Favoriten und gespeicherte Bilder waren getrennt)
+	 * Veraltete Lesefunktion
 	 */
 	@Deprecated
 	public void readFolder() {

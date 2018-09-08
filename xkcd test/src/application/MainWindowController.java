@@ -3,7 +3,6 @@ package application;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.nio.file.Path;
 
 import javafx.fxml.FXML;
@@ -14,11 +13,14 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
 
-
+/**
+ * Diese Klasse stellt das Interface für das Hauptfenster dar,
+ * zudem ist sie für das laden der Bilder zuständig.
+ * @author je
+ *
+ */
 public class MainWindowController {
 	
 	private Control control;
@@ -42,16 +44,20 @@ public class MainWindowController {
 	@FXML private Label imgLabel;
 	@FXML private CheckBox offlineCheckbox;
 	
-	
+	/**
+	 * Setzt Startwerte für das MainWindow
+	 */
 	@FXML
-	public void initialize() throws IOException {	
+	public void initialize() {	
 		isInternet = Main.isInternet();
 		
+		//Schaltet auf Offlinemodus um, falls keine Verbindung mit dem Internet hergestellt werden kann.
 		if(!isInternet) {
 			offlineCheckbox.fire();
 			offlineCheckbox.disableProperty().set(true);
 		}
 		
+		//zentriert Bild im ScrollPane
 		scrollPane.setFitToHeight(true);
 		scrollPane.setFitToWidth(true);
 	}
@@ -76,6 +82,10 @@ public class MainWindowController {
 		return currentNumber;
 	}
 	
+	/**
+	 * Der Ladealgorithmus für gespeicherte XKCDs
+	 * @param number Die Nummer des zu ladenden XKCD
+	 */
 	public void loadOffline(int number) {
 		try {
 			currentNumber = number;
@@ -89,10 +99,15 @@ public class MainWindowController {
 			scrollPane.requestFocus();
 		}catch(Exception e) {
 			System.out.println("Load failed");
+			loadInvalid(e.getMessage());
 			e.printStackTrace();
 		}
 	}
 	
+	/**
+	 * Hauptladealgorithmus
+	 * @param number Nummer des XKCDs welcher geladen werden soll.
+	 */
 	public void load(int number) {
 		if(number > 0 && number <= Parser.getNewest()) {
 			Image image;
@@ -119,7 +134,8 @@ public class MainWindowController {
 			scrollPane.requestFocus();
 		} else {
 			numberField.clear();
-			numberField.setPromptText("Invalid Number");
+			//numberField.setPromptText("Invalid Number");
+			loadInvalid("Invalid Number");
 			
 		}
 	}
@@ -176,16 +192,38 @@ public class MainWindowController {
 			offLoader.loadRandom();
 	}
 	
+	/**
+	 * Funktion welche im Fehlerfall aufgerufen wird.
+	 * @param message Fehlernachicht welche auf dem Textstreifen eingeblended wird.
+	 */
+	public void loadInvalid(String message) {
+			Image image;
+			File file = new File("."+File.separator+"1969 - Not Available.jpeg");
+			try {
+				image = new Image(new FileInputStream(file));
+				imageView.setImage(image);
+			} catch (FileNotFoundException e) {
+				System.out.println("Error:Image not Found");
+			}
+			Main.getStage().setTitle("Error");
+			imgLabel.setText(message);
+			numberField.setText(Integer.toString(currentNumber));
+			scrollPane.requestFocus();
+	}
+	
 	@FXML
 	public void showFavorites() {
 		control.showFavorites();
 	}
 	
+	/**
+	 * Fügt XKCD der Favoritenliste hinzu, speichert Bild, Titel und Subtitel.
+	 * Falls das XKCD ein Duplikat ist werden die Einträge entfernt, aber die Bilddatei an sich bleibt bestehen.
+	 */
 	@FXML
 	public void favorite() {
 		if(isInternet) {
 			try {
-				//get title
 				Parser parser = new Parser(currentNumber);
 				String title = parser.parseTitle();
 	
@@ -213,6 +251,9 @@ public class MainWindowController {
 		}
 	}
 	
+	/**
+	 * Schaltet den Offlinemodus ein bzw. aus.
+	 */
 	@FXML
 	public void switchNetworkMode() {
 		if(offlineCheckbox.isSelected())

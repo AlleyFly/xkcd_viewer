@@ -1,6 +1,5 @@
 package application;
 
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,8 +16,16 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+/**
+ * Hauptklasse der Anwendung
+ * @author je
+ *
+ */
 public class Control {
-	private ArrayList<XKCD> favorites;
+	/**
+	 * Liste der Favorisierten XKCD's
+	 */
+	private ArrayList<XKCD> favorites;	
 	
 	public  MainWindowController mainController;
 	public FavoriteWindowController favController;
@@ -70,6 +77,7 @@ public class Control {
 		Stage favStage = new Stage();
         favStage.setScene(new Scene(root1));  
 		
+        //set Stages
 		this.primaryStage = primaryStage;
 		this.favoriteStage = favStage;
 		
@@ -77,6 +85,7 @@ public class Control {
 		
 		setListeners();
 		
+		//auf Internet prüfen und neusten XKCD laden
 		if(Main.isInternet())
 			mainController.loadRecent();
 		else
@@ -86,16 +95,24 @@ public class Control {
 		openFavorites();
 	}
 	
+	/**
+	 * Getter für Controller des Hauptfensters
+	 * @return Referenz zum Controller
+	 */
 	public MainWindowController getMainController() {
 		return mainController;
 	}
 	
+	/**
+	 * Getter für Controller des Favoriten-Tabs
+	 * @return Referenz zum Controller
+	 */
 	public FavoriteWindowController getFavController() {
 		return favController;
 	}
 	
 	/**
-	 * toggle the Favorite Window
+	 * Schaltet das Favoriten-Tab auf oder zu
 	 */
 	public void showFavorites() {  
 		if(favoriteStage.isShowing()) {
@@ -109,7 +126,7 @@ public class Control {
 	}
 	
 	/**
-	 * Favoriten-Tab oeffnen
+	 * Öffnet Favoriten-Tab
 	 */
 	public void openFavorites() {
 		if(!favoriteStage.isShowing()) {
@@ -122,8 +139,7 @@ public class Control {
 	}
 	
 	/**
-	 * closing the Favorite Window
-	 * mainly used to close it when Main Window is closed
+	 * Schließt das Favoriten-Tab
 	 */
 	public void closeFavorites() {
 		if(favoriteStage.isShowing())
@@ -136,7 +152,7 @@ public class Control {
 	}
 	
 	/**
-	 * sets all the Listeners
+	 * Setzt Listener für NUMPAD-Navigation, laden aus Favoriten sowie schließen des Favoriten-Tabs bei beenden der Anwendung
 	 */
 	public void setListeners() {
 		
@@ -175,10 +191,10 @@ public class Control {
 	
 	
 	/**
-	 * adding a Favorite to the list(favorites)
+	 * Fügt Favorit der Liste hinzu
 	 * 
-	 * @param fav Favorite to add
-	 * @return true if its a new Favorite, false if it is already a Favorite
+	 * @param fav Favorit welcher hinzugefügt werden soll
+	 * @return true bei erfolgreichem hinzufügen, false bei Duplikat in Liste
 	 */
 	public boolean addFavorite(XKCD fav) {
 		if(favorites.contains(fav)) {
@@ -194,7 +210,7 @@ public class Control {
 	/**
 	 * Getter für Favoriten
 	 * 
-	 * @return Array of Favorites
+	 * @return Favoriten als ArrayList<XKCD>
 	 */
 	public ArrayList<XKCD> getFavorites() {
 		return favorites;
@@ -204,7 +220,7 @@ public class Control {
 	/**
 	 * Speichert Favoriten als File "Favorites.sav"
 	 * 
-	 * @throws IOException
+	 * @throws IOException falls Savefile nicht gefunden wurde
 	 */
 	public void saveList() throws IOException {
 		FileOutputStream fos = new FileOutputStream("Favorites.sav");
@@ -213,11 +229,12 @@ public class Control {
 		oos.close();
 	}
 	
+
 	/**
-	 * Läd Favoriten als Liste, aus File "Favorites.sav"
-	 * 
-	 * @throws ClassNotFoundException
-	 * @throws IOException
+	 * Läd Liste aus Savefile "Favorites.sav"
+	 * @return Favoriten als ArrayList<XKCD>
+	 * @throws ClassNotFoundException falls Savefile korrupt ist
+	 * @throws IOException falls Savefile nicht gefunden wurde
 	 */
 	public ArrayList<XKCD> loadList() throws ClassNotFoundException, IOException {
 		FileInputStream fis = new FileInputStream("Favorites.sav");

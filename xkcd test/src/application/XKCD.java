@@ -32,7 +32,7 @@ public class XKCD implements Serializable {
 	/**
 	 * Erstellt XKCD nur mit number,
 	 * zum Vegleich mit .contains()
-	 * @param number
+	 * @param number Key-Wert zum Vergleichen
 	 */
 	public XKCD(int number) {
 		this.number = number;

@@ -3,6 +3,11 @@ package application;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+/**
+ * Übernimmt laden der XKCD's wenn kein Internet vorhanden ist.
+ * @author je
+ *
+ */
 public class OfflineLoader {
 
 	private MainWindowController mainWindowController;
@@ -11,11 +16,9 @@ public class OfflineLoader {
 	private int iKey;
 	
 	
-	//Problemfaktor
 	public OfflineLoader(MainWindowController mainController, Speicher speicher) {
 		mainWindowController = mainController;
-		//speicher = new Speicher();
-		this.speicher = speicher; //evtl fehler durch lok. kopie statt pointer?
+		this.speicher = speicher;
 		Iterator<XKCD> keys = speicher.getIterator();
 		savedKeys = new ArrayList<Integer>();
 		keys.forEachRemaining(e -> savedKeys.add(e.getNumber()));
@@ -37,8 +40,8 @@ public class OfflineLoader {
 			mainWindowController.loadOffline(currentNumber);
 			return currentNumber;
 		}catch(IndexOutOfBoundsException e) {
-			System.out.println("Reached first favorite");
-			iKey++;
+			mainWindowController.loadInvalid("Erster Favorit erreicht.");
+			iKey = -1;
 			return savedKeys.get(0);
 		}
 	}
@@ -49,8 +52,8 @@ public class OfflineLoader {
 			mainWindowController.loadOffline(currentNumber);
 			return currentNumber;
 		}catch(IndexOutOfBoundsException e) {
-			System.out.println("Reached last favorite");
-			iKey--;
+			mainWindowController.loadInvalid("Letzter Favorit erreicht.");
+			iKey = savedKeys.size();
 			return savedKeys.get(savedKeys.size()-1);
 		}
 	}
@@ -66,7 +69,7 @@ public class OfflineLoader {
 		if(savedKeys.contains(number)) {
 			mainWindowController.loadOffline(number);
 		}else {
-			mainWindowController.getTextField().setText("Not available offline");
+			mainWindowController.loadInvalid("Offline nicht verfügbar.");
 			mainWindowController.getScrollPane().requestFocus();
 		}
 	}
