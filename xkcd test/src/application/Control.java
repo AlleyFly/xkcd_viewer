@@ -27,14 +27,31 @@ public class Control {
 	 */
 	private ArrayList<XKCD> favorites;	
 	
-	public  MainWindowController mainController;
+	/**
+	 * Referenz zum Aufrufen
+	 */
+	public MainWindowController mainController;
+	/**
+	 * Referenz zum Aufrufen
+	 */
 	public FavoriteWindowController favController;
+	/**
+	 * Referenz zum Aufrufen
+	 */
 	public OfflineLoader offLoader;
+	/**
+	 * Referenz zum Aufrufen
+	 */
 	public Speicher speicher;
 
 	private Stage primaryStage;
 	private Stage favoriteStage;
 	
+	/**
+	 * Konstruktor fuer Control, laed FXML, die Favoritenliste, erstellt Speicher sowie Offlineloader, prueft Internetverbindung und Oeffnet die Fenster
+	 * @param primaryStage Die in Main angelegte Stage wird uebergeben
+	 * @throws IOException Bei einem Fehler des FXML-loaders
+	 */
 	public Control(Stage primaryStage) throws IOException {
 		
 		favorites = new ArrayList<XKCD>();	
@@ -85,7 +102,7 @@ public class Control {
 		
 		setListeners();
 		
-		//auf Internet prüfen und neusten XKCD laden
+		//auf Internet pruefen und neusten XKCD laden
 		if(Main.isInternet())
 			mainController.loadRecent();
 		else
@@ -96,7 +113,7 @@ public class Control {
 	}
 	
 	/**
-	 * Getter für Controller des Hauptfensters
+	 * Getter fuer Controller des Hauptfensters
 	 * @return Referenz zum Controller
 	 */
 	public MainWindowController getMainController() {
@@ -104,7 +121,7 @@ public class Control {
 	}
 	
 	/**
-	 * Getter für Controller des Favoriten-Tabs
+	 * Getter fuer Controller des Favoriten-Tabs
 	 * @return Referenz zum Controller
 	 */
 	public FavoriteWindowController getFavController() {
@@ -126,7 +143,7 @@ public class Control {
 	}
 	
 	/**
-	 * Öffnet Favoriten-Tab
+	 * oeffnet Favoriten-Tab
 	 */
 	public void openFavorites() {
 		if(!favoriteStage.isShowing()) {
@@ -152,7 +169,7 @@ public class Control {
 	}
 	
 	/**
-	 * Setzt Listener für NUMPAD-Navigation, laden aus Favoriten sowie schließen des Favoriten-Tabs bei beenden der Anwendung
+	 * Setzt Listener fuer NUMPAD-Navigation, laden aus Favoriten sowie schließen des Favoriten-Tabs bei beenden der Anwendung
 	 */
 	public void setListeners() {
 		
@@ -191,10 +208,10 @@ public class Control {
 	
 	
 	/**
-	 * Fügt Favorit der Liste hinzu
+	 * Fuegt Favorit der Liste hinzu
 	 * 
-	 * @param fav Favorit welcher hinzugefügt werden soll
-	 * @return true bei erfolgreichem hinzufügen, false bei Duplikat in Liste
+	 * @param fav Favorit welcher hinzugefuegt werden soll
+	 * @return true bei erfolgreichem hinzufuegen, false bei Duplikat in Liste
 	 */
 	public boolean addFavorite(XKCD fav) {
 		if(favorites.contains(fav)) {
@@ -208,7 +225,7 @@ public class Control {
 	
 	
 	/**
-	 * Getter für Favoriten
+	 * Getter fuer Favoriten
 	 * 
 	 * @return Favoriten als ArrayList<XKCD>
 	 */
@@ -231,7 +248,7 @@ public class Control {
 	
 
 	/**
-	 * Läd Liste aus Savefile "Favorites.sav"
+	 * Laed Liste aus Savefile "Favorites.sav"
 	 * @return Favoriten als ArrayList<XKCD>
 	 * @throws ClassNotFoundException falls Savefile korrupt ist
 	 * @throws IOException falls Savefile nicht gefunden wurde
@@ -246,9 +263,9 @@ public class Control {
 	
 	/**
 	 * Gibt alle Favoriten aus
-	 * Für Debug Zwecke
+	 * Fuer Debug Zwecke
 	 */
-	public void printFavorites() {
+	private void printFavorites() {
 		for(XKCD x : favorites) {
 			System.out.println(x.getNumber()+" - "+x.getTitle()+" - "+x.getPath());
 		}

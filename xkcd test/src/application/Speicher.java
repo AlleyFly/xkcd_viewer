@@ -16,10 +16,14 @@ import javax.imageio.ImageIO;
  */
 public class Speicher {
 
-	Path dirPath;
+	private Path dirPath;
 	
-	Control control;
+	private Control control;
 	
+	/**
+	 * Konstruktor erstellt Platformunabhaengig Pfad zum "SavedImages" Ordner, erstellt diesen falls nicht vorhanden
+	 * @param control Refenz zu Control
+	 */
 	public Speicher(Control control) {
 		
 		this.dirPath = Paths.get(Paths.get(".").toAbsolutePath().toString() + File.separator + "SavedImages");
@@ -29,32 +33,63 @@ public class Speicher {
 		//readFolder();
 	}
 	
+	/**
+	 * Prueft ob XKCD in Control.favorites vorhanden ist
+	 * @param xkcd XKCD fuer welchen geprueft werden soll
+	 * @return true falls enthalten, false falls nicht
+	 */
 	public boolean isSaved(XKCD xkcd) {
 		return control.getFavorites().contains(xkcd);
 	}
 	
+	/**
+	 * Gibt Iterator fuer Control.favorites zurueck
+	 * @return Control.favorites als Iterator<XKCD> 
+	 */
 	public Iterator<XKCD> getIterator(){
 		return control.getFavorites().iterator();
 	}
 	
+	/**
+	 * Laed Pfad zu Bild
+	 * @param number Nummer des XKCDs wessen Bild geladen werden soll
+	 * @return Speicherpfad als Path
+	 */
 	public Path getPath(int number) {
 		XKCD comp = new XKCD(number);
 		int index = control.getFavorites().indexOf(comp);
 		return control.getFavorites().get(index).getPath();
 	}
 	
+	/**
+	 * Laed Bildunterschrift
+	 * @param number Nummer des zu ladenden XKCD
+	 * @return Bildunterschrift als String
+	 */
 	public String getAlt(int number) {
 		XKCD comp = new XKCD(number);
 		int index = control.getFavorites().indexOf(comp);
 		return control.getFavorites().get(index).getAlt();
 	}
 	
+	/**
+	 * Laed Titel
+	 * @param number Nummer des zu ladenden XKCD
+	 * @return Titel als String
+	 */
 	public String getTitle(int number) {
 		XKCD comp = new XKCD(number);
 		int index = control.getFavorites().indexOf(comp);
 		return control.getFavorites().get(index).getTitle();
 	}
 	
+	/**
+	 * Laed Bild aus dem Netz und speichert es im "SavedImages" Ordner
+	 * @param number Nummer des zu speichernden XKCD als int
+	 * @param title Titel als String
+	 * @return Speicherpfad als Path
+	 * @throws IOException Bei einem Fehler im Parser oder bei ImageIO
+	 */
 	public Path saveImage(int number, String title) throws IOException {
 		Parser parser = new Parser(number);
 		URL imageURL = new URL(parser.parseImageURL());
@@ -72,7 +107,7 @@ public class Speicher {
 	 * Veraltete Lesefunktion
 	 */
 	@Deprecated
-	public void readFolder() {
+	private void readFolder() {
 		control.getFavorites().clear();
 		File folder = new File(dirPath.toString());
 		File[] fileList = folder.listFiles();
@@ -87,7 +122,7 @@ public class Speicher {
 		printMap();
 	}
 	
-	public void printMap() {
+	private void printMap() {
 		System.out.println("Gespeicherte Bilder: ");
 		if(control.getFavorites().isEmpty())
 			System.out.println("\tkeine Bilder gespeichert");

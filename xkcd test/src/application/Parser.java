@@ -2,6 +2,11 @@ package application;
 
 import com.eclipsesource.json.*;
 
+/**
+ * Parser fuer die API
+ * @author je
+ *
+ */
 public class Parser {
 	
 	private JsonValue jvalue;
@@ -10,7 +15,7 @@ public class Parser {
 	
 	/**
 	 * Standard-Konstruktor
-	 * Läd den neusten Comic
+	 * Laed den neusten Comic
 	 */
 	public Parser() {
 		try{
@@ -23,7 +28,7 @@ public class Parser {
 	
 	/**
 	 * Parametesierter Konstruktor
-	 * Läd bestimmten Comic
+	 * Laed bestimmten Comic
 	 * @param  number  Nummer des zu ladenden Comics
 	 */
 	public Parser(int number) {
@@ -40,7 +45,7 @@ public class Parser {
 	}
 	
 	/**
-	 * Parser für das Bild
+	 * Parser fuer das Bild
 	 * 
 	 * @return die URL der Bilddatei als String
 	 */
@@ -49,7 +54,7 @@ public class Parser {
 	}
 	
 	/**
-	 * Parser für Bildtitel
+	 * Parser fuer Bildtitel
 	 * 
 	 * @return Bildtitel als String
 	 */
@@ -58,7 +63,7 @@ public class Parser {
 	}
 	
 	/**
-	 * Parser für alternative Information
+	 * Parser fuer alternative Information
 	 * 
 	 * @return Text als String
 	 */
@@ -70,7 +75,7 @@ public class Parser {
 	/**
 	 * Sucht Nummer des neusten Comics
 	 * 
-	 * @return Nummer des neusten als int
+	 * @return Nummer des neusten XKCD als int
 	 */
 	public static int getNewest() {
 		try {

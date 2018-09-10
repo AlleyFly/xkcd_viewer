@@ -1,8 +1,12 @@
 package application;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Path;
 
 import javafx.fxml.FXML;
@@ -16,17 +20,28 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 
 /**
- * Diese Klasse stellt das Interface für das Hauptfenster dar,
- * zudem ist sie für das laden der Bilder zuständig.
+ * Diese Klasse stellt das Interface fuer das Hauptfenster dar,
+ * zudem ist sie für das laden der Bilder zustaendig.
  * @author je
  *
  */
 public class MainWindowController {
 	
+	/**
+	 * Referenz zum Controller, zum einfacheren Aufruf seiner Methoden.
+	 */
 	private Control control;
+	/**
+	 * Refenz zum Offlineloader, welcher das laden ohne Netzwerk uebernimmt.
+	 */
 	private OfflineLoader offLoader;
-	
+	/**
+	 * Die Nummer des aktuell geladenen XKCD.
+	 */
 	private int currentNumber;
+	/**
+	 * Zur Abfrage der Netwerkverbindung durch Methoden.
+	 */
 	private boolean isInternet;
 	
 	@FXML private Button recentButton;
@@ -40,12 +55,12 @@ public class MainWindowController {
 	@FXML private ScrollPane scrollPane;
 	@FXML private StackPane stackPane;
 	@FXML private Button favWindowButton;
-	@FXML private Button saveButton;
+	@FXML private Button explainButton;
 	@FXML private Label imgLabel;
 	@FXML private CheckBox offlineCheckbox;
 	
 	/**
-	 * Setzt Startwerte für das MainWindow
+	 * Setzt Startwerte fuer das MainWindow
 	 */
 	@FXML
 	public void initialize() {	
@@ -60,12 +75,22 @@ public class MainWindowController {
 		//zentriert Bild im ScrollPane
 		scrollPane.setFitToHeight(true);
 		scrollPane.setFitToWidth(true);
+		
+		//Funktioniert nicht
+		explainButton.setDisable(true);
 	}
 	
+	/**
+	 * setzt die Refernz zum Controller
+	 * @param control Die uebergabe der Refenz
+	 */
 	public void setControl(Control control) {
 		this.control = control;
 	}
-	
+	/**
+	 * fuer kuerzeren Aufruf des Offlineloaders
+	 * @param offLoader Referenz zum Offlineloader
+	 */
 	public void setOfflineLoader(OfflineLoader offLoader) {
 		this.offLoader = offLoader;
 	}
@@ -83,7 +108,7 @@ public class MainWindowController {
 	}
 	
 	/**
-	 * Der Ladealgorithmus für gespeicherte XKCDs
+	 * Der Ladealgorithmus fuer gespeicherte XKCDs
 	 * @param number Die Nummer des zu ladenden XKCD
 	 */
 	public void loadOffline(int number) {
@@ -100,12 +125,13 @@ public class MainWindowController {
 		}catch(Exception e) {
 			System.out.println("Load failed");
 			loadInvalid(e.getMessage());
-			e.printStackTrace();
+			//9e.printStackTrace();
 		}
 	}
 	
 	/**
-	 * Hauptladealgorithmus
+	 * Laed Bild, falls gespeichert offline, sonst aus Netzt, setzt Bilduntertitle, Titel und Nummerfeld.
+	 * Laed bei ungueltiger Nummer das Fehlerbild
 	 * @param number Nummer des XKCDs welcher geladen werden soll.
 	 */
 	public void load(int number) {
@@ -140,6 +166,9 @@ public class MainWindowController {
 		}
 	}
 	
+	/**
+	 * Parst die Nummer aus dem Textfeld und uebergibt sie an load()
+	 */
 	@FXML
 	public void loadNumber() {
 		currentNumber = Integer.parseInt(numberField.getText());
@@ -149,7 +178,9 @@ public class MainWindowController {
 		else
 			offLoader.loadNumber(currentNumber);
 	}
-	
+	/**
+	 * Liest die Nummer des neusten XKCD aus der API und uebergibt sie an load()
+	 */
 	@FXML
 	public void loadRecent() {	
 		if(isInternet) {
@@ -159,7 +190,9 @@ public class MainWindowController {
 		}else
 			offLoader.loadRecent();
 	}
-	
+	/**
+	 * Verringert currentNumber um 1 und uebergibt sie an load()
+	 */
 	@FXML
 	public void loadPrev() {
 		if(isInternet) {
@@ -169,7 +202,9 @@ public class MainWindowController {
 		}else
 			offLoader.loadPrev();
 	}
-	
+	/**
+	 * Erhoeht currentNumber um 1 und uebergibt sie an load()
+	 */
 	@FXML
 	public void loadNext() {
 		if(isInternet) {
@@ -179,7 +214,9 @@ public class MainWindowController {
 		}else
 			offLoader.loadNext();
 	}
-	
+	/**
+	 * Parst die Nummer des neusten XKCD aus der API, waehlt eine zufaellige Zahl zwischen 1 und dieser Nummer, uebergibt sie dann an load()
+	 */
 	@FXML
 	public void loadRandom() {
 		if(isInternet) {
@@ -210,14 +247,16 @@ public class MainWindowController {
 			numberField.setText(Integer.toString(currentNumber));
 			scrollPane.requestFocus();
 	}
-	
+	/**
+	 * Funktion hinter dem "oeffne Favoriten" Button
+	 */
 	@FXML
 	public void showFavorites() {
 		control.showFavorites();
 	}
 	
 	/**
-	 * Fügt XKCD der Favoritenliste hinzu, speichert Bild, Titel und Subtitel.
+	 * Fuegt XKCD der Favoritenliste hinzu, speichert Bild, Titel und Subtitel.
 	 * Falls das XKCD ein Duplikat ist werden die Einträge entfernt, aber die Bilddatei an sich bleibt bestehen.
 	 */
 	@FXML
@@ -261,15 +300,29 @@ public class MainWindowController {
 		else
 			isInternet = true;
 	}
-	
+	/**
+	 * Soll die Seite explainxkcd.com mit currentNumber aufrufen, fuehrt zum Absturz des Programms
+	 */
 	@FXML
-	public void debug() {
-		System.out.println("Network-Mode: "+isInternet);
-		control.printFavorites();
-		System.out.println("Control favorites");
-		control.speicher.printMap();
-		System.out.println("offLoader favorites");
-		offLoader.speicher.printMap();
-	}
-	
+	public void explain() {
+		 String url = "https://www.explainxkcd.com/wiki/index.php/"+currentNumber;
+
+	        if(Desktop.isDesktopSupported()){
+	            Desktop desktop = Desktop.getDesktop();
+	            try {
+	                desktop.browse(new URI(url));
+	            } catch (IOException | URISyntaxException e) {
+	                // TODO Auto-generated catch block
+	                e.printStackTrace();
+	            }
+	        }else{
+	            Runtime runtime = Runtime.getRuntime();
+	            try {
+	                runtime.exec("xdg-open " + url);
+	            } catch (IOException e) {
+	                // TODO Auto-generated catch block
+	                e.printStackTrace();
+	            }
+	        }
+	}	
 }
