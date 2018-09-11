@@ -40,6 +40,10 @@ public class FavoriteWindowController {
 		this.control = control;
 	}
 	
+	/**
+	 * Getter für Tabelle mit Favoriten
+	 * @return Favoritentabelle als TableView
+	 */
 	public TableView getTable() {
 		return tabFavorites;
 	}

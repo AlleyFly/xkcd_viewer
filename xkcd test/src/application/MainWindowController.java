@@ -95,14 +95,25 @@ public class MainWindowController {
 		this.offLoader = offLoader;
 	}
 
+	/**
+	 * Getter für Nummernfeld
+	 * @return Nummerfeld als TextField
+	 */
 	public TextField getTextField() {
 		return numberField;
 	}
-	
+	/**
+	 * Getter für Bildfläche
+	 * @return Refenz zur Scrollpane in der das ImageView ist
+	 */
 	public ScrollPane getScrollPane() {
 		return scrollPane;
 	}
 	
+	/**
+	 * Zum lesen der aktuellen Nummer
+	 * @return currentNumber als int
+	 */
 	public int getCurrentNumber() {
 		return currentNumber;
 	}
